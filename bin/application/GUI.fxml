@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.HBox?>
 
-
-<HBox prefHeight="800.0" prefWidth="1000.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="application.GUIController">
+<HBox prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.GUIController">
    <children>
       <GridPane prefHeight="765.0" prefWidth="978.0">
         <columnConstraints>
@@ -25,10 +24,20 @@
          <children>
             <HBox alignment="TOP_CENTER" prefHeight="222.0" prefWidth="448.0" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" onAction="#displayImage" text="Load Original" />
+                  <Button mnemonicParsing="false" onAction="#displayImage1" text="Load Original" />
                </children>
             </HBox>
-            <ScrollPane fx:id="pictureframe" prefHeight="116.0" prefWidth="178.0" />
+            <ScrollPane fx:id="pictureframe1" prefHeight="116.0" prefWidth="178.0" />
+            <ScrollPane fx:id="pictureframe2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+              </content>
+            </ScrollPane>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#displayImage2" text="Button" />
+               </children>
+            </HBox>
          </children>
          <HBox.margin>
             <Insets />
