@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 
-public class PreProcess {
+public class Scanning {
 
 	static String filename;
 	static LoadImage preimage;
@@ -26,25 +26,11 @@ public class PreProcess {
 	
 	public static BufferedImage Execute(String filename, int threshold) throws IOException{
 		
-		//int threshold;
-		
-		/* GET THE FILE AND DISPLAY IT */
-		//System.out.println("Please enter a filename to import: ");
-		//filename = reader.readLine();
-		//filename = "colors.jpg";
-		//System.out.println("Please enter the black and white threshold: ");
-		//threshold = Integer.parseInt(reader.readLine());
-		//threshold = 125;
-		 
-		//preimage = new LoadImage(filename);
-		//if(preimage != null) System.out.println("Preimage not null");
-		//if(preimage.img == null) System.out.println("Preimage.img null!");
+
 		subject = ImageIO.read(new File(filename));//preimage.img;
 		width = subject.getWidth(); //ERROR HERE!!!!!
 		height = subject.getHeight();
-		
-		//display("Sample Image", preimage);
-		
+			
 		data = buildPixelArray(subject);
 		colorArray = dataToBlackAndWhite(threshold, data);
 		//colorArray = dataToGrayscale(data);
@@ -53,26 +39,8 @@ public class PreProcess {
 		
 		return outImage;
 		
-		//display("Processed Image", new LoadImage(outImage));
-		
 		//printData(data);		
 	}
-	
-	
-//	public static void display(String jName, LoadImage image){
-//	
-//		JFrame f = new JFrame(jName);
-//		
-//		f.addWindowListener(new WindowAdapter(){
-//			public void windowClosing(WindowEvent e){
-//				System.exit(0);
-//			}
-//		});
-//		
-//		f.add(image); 
-//		f.pack();
-//		f.setVisible(true);
-//	}
 	
 	public static int[][][] buildPixelArray(BufferedImage target){
 		
@@ -185,30 +153,30 @@ public class PreProcess {
 		return bufferedImage;
 	}
 	
-//	public static void printData(int[][][] inData){
-//		
-//		for(int i=0; i<4; i++){
-//			
-//			if(i==0) System.out.println("\n\tRED\n");
-//			if(i==1) System.out.println("\n\tGREEN\n");
-//			if(i==2) System.out.println("\n\tBLUE\n");
-//			if(i==3) System.out.println("\n\tALPHA\n");
-//			
-//			for(int j=0; j<height; j++){
-//				for(int k=0; k<width; k++){
-//					
-//					System.out.print((inData[k][j][i]) + "\t");
-//				}			
-//				System.out.println();
-//			}
-//		}
-//	}
+	public static void printData(int[][][] inData){
+		
+		for(int i=0; i<4; i++){
+			
+			if(i==0) System.out.println("\n\tRED\n");
+			if(i==1) System.out.println("\n\tGREEN\n");
+			if(i==2) System.out.println("\n\tBLUE\n");
+			if(i==3) System.out.println("\n\tALPHA\n");
+			
+			for(int j=0; j<height; j++){
+				for(int k=0; k<width; k++){
+					
+					System.out.print((inData[k][j][i]) + "\t");
+				}			
+				System.out.println();
+			}
+		}
+	}
 	
-//	public static void writeFile(String filename, String filetype, BufferedImage image){
-//		
-//		try {
-//		    File outputfile = new File(filename);
-//		    ImageIO.write(image, filetype, outputfile);
-//		} catch (IOException e) {}
-//	}
+	public static void writeFile(String filename, String filetype, BufferedImage image){
+		
+		try {
+		    File outputfile = new File(filename);
+		    ImageIO.write(image, filetype, outputfile);
+		} catch (IOException e) {}
+	}
 }
