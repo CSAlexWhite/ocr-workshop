@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
@@ -7,35 +8,78 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="alexwhitecs.fx.GUIController">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1240.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="alexwhitecs.fx.GUIController">
    <children>
-      <GridPane prefHeight="765.0" prefWidth="978.0">
+      <GridPane prefHeight="720.0" prefWidth="1200.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="492.0" minWidth="10.0" prefWidth="461.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="411.0" minWidth="2.0" prefWidth="14.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="472.0" minWidth="10.0" prefWidth="460.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="520.0" minWidth="100.0" prefWidth="140.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="520.0" minWidth="0.0" prefWidth="58.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="25.0" prefWidth="25.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="498.0" minWidth="100.0" prefWidth="140.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="456.0" minHeight="10.0" prefHeight="455.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="193.0" minHeight="0.0" prefHeight="13.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="142.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="148.0" minHeight="10.0" prefHeight="132.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+            <RowConstraints />
+            <RowConstraints maxHeight="456.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="400.0" minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="456.0" minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="193.0" minHeight="0.0" prefHeight="60.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox alignment="TOP_CENTER" prefHeight="222.0" prefWidth="448.0" GridPane.rowIndex="2">
+            <HBox alignment="CENTER" prefHeight="222.0" prefWidth="448.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <children>
-                  <Button mnemonicParsing="false" onAction="#displayImage1" text="Load Original" />
+                  <Button mnemonicParsing="false" onAction="#displayImage1" text="Increment Threshold" />
                </children>
             </HBox>
-            <ScrollPane fx:id="pictureframe1" prefHeight="116.0" prefWidth="178.0" />
-            <ScrollPane fx:id="pictureframe2" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
-              </content>
-            </ScrollPane>
-            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <ScrollPane fx:id="pictureframe1" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <ScrollPane fx:id="pictureframe2" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="5">
                <children>
-                  <Button mnemonicParsing="false" onAction="#displayImage2" text="Button" />
+                  <Button mnemonicParsing="false" onAction="#displayImage2" text="Load Original" />
+               </children>
+            </HBox>
+            <MenuBar prefHeight="25.0" prefWidth="583.0" GridPane.columnSpan="7" GridPane.rowIndex="1">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Preferences">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Optical Scanning" />
+                  <Menu mnemonicParsing="false" text="Segmentation" />
+                  <Menu mnemonicParsing="false" text="Preprocessing" />
+                  <Menu mnemonicParsing="false" text="Feature Extraction" />
+                  <Menu mnemonicParsing="false" text="Classification" />
+                  <Menu mnemonicParsing="false" text="Postprocessing" />
+                  <Menu mnemonicParsing="false" text="Data Operations" />
+                  <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                    </items>
+                  </Menu>
+              </menus>
+               <padding>
+                  <Insets left="115.0" />
+               </padding>
+            </MenuBar>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+               <children>
+                  <ProgressBar prefWidth="200.0" progress="0.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="6">
+               <children>
+                  <ProgressBar prefWidth="200.0" progress="0.0" />
                </children>
             </HBox>
          </children>
@@ -47,4 +91,7 @@
    <padding>
       <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
    </padding>
+   <opaqueInsets>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </opaqueInsets>
 </HBox>

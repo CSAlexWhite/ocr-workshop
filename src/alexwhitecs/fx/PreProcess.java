@@ -24,17 +24,17 @@ public class PreProcess {
 	static int width;
 	static int height;
 	
-	public static BufferedImage Execute() throws IOException{
+	public static BufferedImage Execute(String filename, int threshold) throws IOException{
 		
-		int threshold;
+		//int threshold;
 		
 		/* GET THE FILE AND DISPLAY IT */
 		//System.out.println("Please enter a filename to import: ");
 		//filename = reader.readLine();
-		filename = "colors.jpg";
+		//filename = "colors.jpg";
 		//System.out.println("Please enter the black and white threshold: ");
 		//threshold = Integer.parseInt(reader.readLine());
-		threshold = 125;
+		//threshold = 125;
 		 
 		//preimage = new LoadImage(filename);
 		//if(preimage != null) System.out.println("Preimage not null");

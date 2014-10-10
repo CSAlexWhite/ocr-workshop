@@ -15,7 +15,7 @@ public class GUIController {
 	@FXML ScrollPane pictureframe1;
 	@FXML ScrollPane pictureframe2;
 	
-	int count = 0;
+	int count = 50;
 	String imagename = null;
 	
 	@FXML public void displayImage1(){
@@ -27,12 +27,12 @@ public class GUIController {
 		
 		/* LOAD THE IMAGE */
 		//Image image = new Image(imagename);
-		
+			
 		BufferedImage bf = null;
 		try {
-			bf = PreProcess.Execute();
+			bf = PreProcess.Execute("letters.jpg", count += 5);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		
@@ -46,11 +46,7 @@ public class GUIController {
 		            }
 		        }
 		    }
-			
-		
-		
-		
-		
+	
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);
 		//picture.setImage(image);
@@ -73,5 +69,7 @@ public class GUIController {
 		picture.setImage(image);
 		
 		pictureframe2.setContent(picture);
-	}	
+	}
+	
+	
 }
