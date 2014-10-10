@@ -24,22 +24,41 @@ public class Scanning {
 	static int width;
 	static int height;
 	
-	public static BufferedImage Execute(String filename, int threshold) throws IOException{
+//	public static BufferedImage Execute(String filename, int threshold) throws IOException{
+//		
+//		BufferedImage out = init(threshold);	
+//		
+//		return out;
+//		
+//		//printData(data);		
+//	}
+	
+	public static int[][][] init(String filename) throws IOException{
 		
-
 		subject = ImageIO.read(new File(filename));//preimage.img;
 		width = subject.getWidth(); //ERROR HERE!!!!!
 		height = subject.getHeight();
-			
 		data = buildPixelArray(subject);
-		colorArray = dataToBlackAndWhite(threshold, data);
+		//colorArray = dataToBlackAndWhite(threshold, data);
+		//colorArray = dataToGrayscale(data);
+		//colorArray = dataToColor(data);
+		//outImage = colorToImage(colorArray);
+		
+		return data;
+	}
+	
+	public static BufferedImage toBuffered(Color[][] inArray){
+		
+		BufferedImage toReturn = colorToImage(inArray);
+		return toReturn;
+	}
+	
+	public static void threshold(int value){
+		
+		colorArray = dataToBlackAndWhite(value, data);
 		//colorArray = dataToGrayscale(data);
 		//colorArray = dataToColor(data);
 		outImage = colorToImage(colorArray);
-		
-		return outImage;
-		
-		//printData(data);		
 	}
 	
 	public static int[][][] buildPixelArray(BufferedImage target){

@@ -34,7 +34,7 @@
             <HBox alignment="CENTER" prefHeight="222.0" prefWidth="448.0" GridPane.columnIndex="2" GridPane.rowIndex="5">
                <children>
                   <Button mnemonicParsing="false" onAction="#displayImage1" text="Increment Threshold" />
-                  <TextArea fx:id="thresholdOutInt" editable="false" maxHeight="-Infinity" prefHeight="25.0" prefWidth="50.0">
+                  <TextArea fx:id="thresholdOutInt" editable="false" maxHeight="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="50.0">
                      <HBox.margin>
                         <Insets left="25.0" />
                      </HBox.margin>
@@ -92,11 +92,7 @@
                         <ProgressBar fx:id="thresholdOutVis" prefHeight="18.0" prefWidth="423.0" progress="0.0" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
-                     <children>
-                        <Slider prefHeight="14.0" prefWidth="427.0" />
-                     </children>
-                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children>

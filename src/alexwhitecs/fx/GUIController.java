@@ -1,5 +1,6 @@
 package alexwhitecs.fx;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -22,6 +23,9 @@ public class GUIController {
 	
 	Integer count;
 	String imagename;
+	
+	int[][][] data;
+	Color[][] colorArray;
 	BufferedImage rawImage;
 	
 	public GUIController(){
@@ -30,12 +34,15 @@ public class GUIController {
 		count = 50;
 		imagename = null;
 		rawImage = null;
+		
+		try {data = Scanning.init("letters.jpg");} 
+		catch (IOException e) {e.printStackTrace();}
 	}
 	
 	@FXML public void displayImage1(){
 			
-		try {rawImage = Scanning.Execute("letters.jpg", count += 5);} 
-		catch (IOException e) {e.printStackTrace();}
+		colorArray = Scanning.dataToBlackAndWhite(count += 5, data);
+		rawImage = Scanning.toBuffered(colorArray);
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
