@@ -25,6 +25,7 @@ public class GUIController {
 	String imagename;
 	
 	int[][][] data;
+	int[][] grays;
 	Color[][] colorArray;
 	BufferedImage rawImage;
 	
@@ -37,11 +38,13 @@ public class GUIController {
 		
 		try {data = Scanning.init("letters.jpg");} 
 		catch (IOException e) {e.printStackTrace();}
+		
+		grays = Scanning.colorToGrayscale(data);
 	}
 	
 	@FXML public void displayImage1(){
 			
-		colorArray = Scanning.dataToBlackAndWhite(count += 5, data);
+		colorArray = Scanning.graysToBlackAndWhite(count += 5, grays);
 		rawImage = Scanning.toBuffered(colorArray);
 		
 		thresholdOutInt.setText(count.toString());

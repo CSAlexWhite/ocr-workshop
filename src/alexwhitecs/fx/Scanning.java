@@ -33,6 +33,20 @@ public class Scanning {
 //		//printData(data);		
 //	}
 	
+//	public static int[][][] init(String filename) throws IOException{
+//		
+//		subject = ImageIO.read(new File(filename));//preimage.img;
+//		width = subject.getWidth(); //ERROR HERE!!!!!
+//		height = subject.getHeight();
+//		data = buildPixelArray(subject);
+//		//colorArray = dataToBlackAndWhite(threshold, data);
+//		//colorArray = dataToGrayscale(data);
+//		//colorArray = dataToColor(data);
+//		//outImage = colorToImage(colorArray);
+//		
+//		return data;
+//	}
+	
 	public static int[][][] init(String filename) throws IOException{
 		
 		subject = ImageIO.read(new File(filename));//preimage.img;
@@ -108,6 +122,40 @@ public class Scanning {
 		}
 		
 		return toReturn;
+	}
+	
+	public static int[][] colorToGrayscale(int[][][] data){
+			
+		int[][] toReturn = new int[width][height];
+		for(int i=0; i<width; i++){
+			for(int j=0; j<height; j++){
+				
+				toReturn[i][j] = ( ( data[i][j][0] + data[i][j][1] + data[i][j][2] ) / 3 );
+			}
+		}
+		
+		return toReturn;
+	}
+	
+	public static Color[][] graysToBlackAndWhite(int threshold, int[][] data){
+		
+		Color[][] toReturn = new Color[width][height];
+		for(int i=0; i<width; i++) toReturn[i] = new Color[height];
+		
+		for(int i=0; i<width; i++){
+			for(int j=0; j<height; j++){
+				
+				
+				
+				if(data[i][j] < threshold) toReturn[i][j] = 
+						new Color(0, 0, 0, 255);
+				
+				else toReturn[i][j] = 										
+						new Color(255, 255, 255, 255);
+			}
+		}
+		
+		return toReturn;	
 	}
 	
 	public static Color[][] dataToBlackAndWhite(int threshold, int[][][] data){
