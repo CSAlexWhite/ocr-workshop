@@ -1,19 +1,18 @@
-package alexwhitecs.fx;
+
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import alexwhitecs.ocr.Scanning;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import alexwhitecs.ocr.Scanning;
 
 public class GUIController {
 	
@@ -46,13 +45,13 @@ public class GUIController {
 	@FXML public void displayImage1(){
 			
 		colorArray = Scanning.graysToBlackAndWhite(count += 5, grays);
-		rawImage = Scanning.colorToImage(colorArray);
+		rawImage = Scanning.toBuffered(colorArray);
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
 		
-		WritableImage wr = getImage(rawImage);
-		
+		getImage(rawImage);
+	
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);
 		
@@ -76,9 +75,7 @@ public class GUIController {
 		pictureframe2.setContent(picture);
 	}
 	
-	/*************************** PRIVATE METHODS ***********************/
-	
-	private WritableImage getImage(BufferedImage input){
+	public WritableImage getImage(BufferedImage input){
 		
 		WritableImage wr = null;
 	    if (input != null) {
