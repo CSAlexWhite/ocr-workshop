@@ -1,15 +1,11 @@
 package alexwhitecs.fx;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import alexwhitecs.ocr.Scanning;
+import alexwhitecs.ocr.OCRImage;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -25,33 +21,26 @@ public class GUIController {
 	Integer count;
 	String imagename;
 	
-	int[][][] data;
-	int[][] grays;
-	Color[][] colorArray;
-	BufferedImage rawImage;
+	OCRImage image1;
+	OCRImage image2;
 	
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
 		count = 50;
 		imagename = null;
-		rawImage = null;
 		
-		try {data = Scanning.init("letters.jpg");} 
-		catch (IOException e) {e.printStackTrace();}
-		
-		grays = Scanning.colorToGrayscale(data);
+		image1 = new OCRImage("letters.jpg");
 	}
 	
 	@FXML public void displayImage1(){
-			
-		colorArray = Scanning.graysToBlackAndWhite(count += 5, grays);
-		rawImage = Scanning.colorToImage(colorArray);
+		
+		image1.threshold(100);
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
 		
-		WritableImage wr = getImage(rawImage);
+		WritableImage wr = getImage(image1.getMonochromeImage());
 		
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);
