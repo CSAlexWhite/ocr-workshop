@@ -57,19 +57,19 @@ public class GUIController {
 	
 	@FXML public void displayImage2(){
 		
-		System.out.println(image2.width + "\t" + image2.height);
-		testdata = Segmentation.reduce(image2.monochrome, image2.width, image2.height);
+//		System.out.println(image2.width + "\t" + image2.height);
+		testdata = Segmentation.reduce(image2.monochrome, image2.width, image2.height,4);
 		image3 = new OCRImage(testdata, count);
-		System.out.println(image3.width + "\t" + image3.height);
-		if(image3.monochrome == null) System.out.println("Null bitch");
+//		System.out.println(image3.width + "\t" + image3.height);
+//		if(image3.monochrome == null) System.out.println("Null bitch");
 		
-		testdata = Segmentation.reduce(image3.monochrome, image3.width, image3.height);
-		image4 = new OCRImage(testdata, count);
+//		testdata = Segmentation.reduce(image3.monochrome, image3.width, image3.height);
+//		image4 = new OCRImage(testdata, count);
+//		
+//		testdata = Segmentation.reduce(image4.monochrome, image4.width, image4.height);
+//		image5 = new OCRImage(testdata, count);
 		
-		testdata = Segmentation.reduce(image4.monochrome, image4.width, image4.height);
-		image5 = new OCRImage(testdata, count);
-		
-		WritableImage wr = getImage(image5.source);
+		WritableImage wr = getImage(image3.source);
 		
 		/* SET IT AS AN IMAGE VIEW */ 
 		ImageView picture = new ImageView(wr);	
