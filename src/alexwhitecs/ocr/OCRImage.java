@@ -40,7 +40,6 @@ public class OCRImage {
 	
 	public OCRImage(BufferedImage preimage, int cutoff){
 		
-		source = preimage;
 		width = source.getWidth();
 		height = source.getHeight();
 		
@@ -48,6 +47,10 @@ public class OCRImage {
 		rawData = Scanning.expandColor(color, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
+		
+		source = Scanning.colorToImage(
+				Scanning.dataToColor(monochrome, width, height), 
+												width, height);
 	}
 	
 	public OCRImage(int[][] inputData, int cutoff){
@@ -63,6 +66,54 @@ public class OCRImage {
 		rawData = Scanning.expandColor(color, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
+	}
+	
+	public OCRImage(OCRImage preimage){
+		
+		width = preimage.width;
+		height = preimage.height;		
+		cutoff = preimage.cutoff;
+		
+		color = new Color[width][height];
+		for(int i=0; i<width; i++){
+			for(int j=0; i<height; j++){
+				
+				System.out.println(j);
+				color[i][j] = preimage.color[i][j];
+			}
+		}
+		
+		color = Scanning.imageToColor(preimage.source, preimage.width, preimage.height);
+		
+		rawData = new int[width][height][4];
+		for(int i=0; i<width; i++){
+			for(int j=0; i<height; j++){
+				for(int k=0; k<4; k++){
+					
+					rawData[i][j][k] = preimage.rawData[i][j][k];
+				}
+			}
+		}
+		
+		grayscale = new int[width][height];
+		for(int i=0; i<width; i++){
+			for(int j=0; i<height; j++){
+	
+				grayscale[i][j] = preimage.grayscale[i][j];
+			}
+		}
+		
+		monochrome = new int[width][height]; 
+		for(int i=0; i<width; i++){
+			for(int j=0; i<height; j++){
+	
+				monochrome[i][j] = preimage.monochrome[i][j];
+			}
+		} 
+		
+		source = Scanning.colorToImage(
+				Scanning.dataToColor(monochrome, width, height), 
+												width, height); 
 	}
 		
 	public void threshold(int cutoff){

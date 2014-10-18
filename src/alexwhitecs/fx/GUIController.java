@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
@@ -20,21 +19,23 @@ public class GUIController {
 	@FXML TextArea thresholdOutInt;
 	@FXML ProgressBar thresholdOutVis;
 	
+	int updown = 0;
 	Integer count;
 	String imagename;
 	
 	int[][] testdata;
 	
+	OCRImage tempImage;
+	
 	OCRImage image1;
 	OCRImage image2;
 	OCRImage image3;
 	OCRImage image4;
-	OCRImage image5;
 	
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
-		count = 50;
+		count = 200;
 		imagename = null;
 		
 		image1 = new OCRImage("letters.jpg", count);
@@ -42,8 +43,11 @@ public class GUIController {
 	
 	@FXML public void displayImage1(){
 		
-		image1.threshold(count += 10);
+		image1.threshold(count += 1);
 		image2 = image1;
+		
+		System.out.println("width " + image2.width);
+		System.out.println("height " + image2.height);
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
@@ -53,25 +57,33 @@ public class GUIController {
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);	
 		pictureframe1.setContent(picture);
+		
+		System.out.println("width " + image2.width);
+		System.out.println("height " + image2.height);
+		
+		tempImage  //image1;
+				= new OCRImage(image2);
 	}
 	
 	@FXML public void displayImage2(){
 		
-//		System.out.println(image2.width + "\t" + image2.height);
-		testdata = Segmentation.reduce(image2.monochrome, image2.width, image2.height,4);
-		image3 = new OCRImage(testdata, count);
-//		System.out.println(image3.width + "\t" + image3.height);
-//		if(image3.monochrome == null) System.out.println("Null bitch");
-		
-//		testdata = Segmentation.reduce(image3.monochrome, image3.width, image3.height);
-//		image4 = new OCRImage(testdata, count);
+//		testdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 1);
+//		tempImage = new OCRImage(testdata, count);
+//				
+//		testdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 1);
+//		tempImage = new OCRImage(testdata, count);
 //		
-//		testdata = Segmentation.reduce(image4.monochrome, image4.width, image4.height);
-//		image5 = new OCRImage(testdata, count);
+//		testdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 2);
+//		tempImage = new OCRImage(testdata, count);
+//				
+//		testdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 2);
+//		tempImage = new OCRImage(testdata, count);
 		
-		WritableImage wr = getImage(image3.source);
+		tempImage = Segmentation.getBlocks(image1, image1.width, image1.height, 0, 1);
 		
-		/* SET IT AS AN IMAGE VIEW */ 
+		WritableImage wr = getImage(tempImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
 	}
