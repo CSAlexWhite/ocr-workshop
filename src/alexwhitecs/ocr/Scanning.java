@@ -54,6 +54,26 @@ public abstract class Scanning {
 		return output;	
 	}
 	
+	public static Color[][] reverseExpansion(int[][][] data, int width, int height){
+		
+		Color[][] toReturn = new Color[width][height];
+		for(int i=0; i<width; i++) toReturn[i] = new Color[height];
+		
+		for(int i=0; i<width; i++){
+			for(int j=0; j<height; j++){
+				
+				toReturn[i][j] = 
+						
+						new Color(	data[i][j][0], 
+									data[i][j][1], 
+									data[i][j][2], 
+									data[i][j][3]);
+			}
+		}
+		
+		return toReturn;
+	}
+	
 	public static int[][] dataToGray(int[][][] data, int width, int height){
 			
 		int[][] toReturn = new int[width][height];

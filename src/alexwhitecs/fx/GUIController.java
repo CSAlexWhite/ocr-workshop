@@ -1,7 +1,9 @@
 package alexwhitecs.fx;
 
 import java.awt.image.BufferedImage;
+
 import alexwhitecs.ocr.OCRImage;
+import alexwhitecs.ocr.Segmentation;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
@@ -21,8 +23,13 @@ public class GUIController {
 	Integer count;
 	String imagename;
 	
+	int[][] testdata;
+	
 	OCRImage image1;
 	OCRImage image2;
+	OCRImage image3;
+	OCRImage image4;
+	OCRImage image5;
 	
 	public GUIController(){
 		
@@ -30,12 +37,13 @@ public class GUIController {
 		count = 50;
 		imagename = null;
 		
-		image1 = new OCRImage("letters.jpg");
+		image1 = new OCRImage("letters.jpg", count);
 	}
 	
 	@FXML public void displayImage1(){
 		
-		image1.threshold(100);
+		image1.threshold(count += 10);
+		image2 = image1;
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
@@ -43,25 +51,28 @@ public class GUIController {
 		WritableImage wr = getImage(image1.getMonochromeImage());
 		
 		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);
-		
+		ImageView picture = new ImageView(wr);	
 		pictureframe1.setContent(picture);
 	}
 	
 	@FXML public void displayImage2(){
 		
-		if(count%3 == 0) imagename = "colors.jpg";
-		if(count%3 == 1) imagename = "letters.jpg";
-		if(count%3 == 2) imagename = "sample.jpg";
-		count++;
+		System.out.println(image2.width + "\t" + image2.height);
+		testdata = Segmentation.reduce(image2.monochrome, image2.width, image2.height);
+		image3 = new OCRImage(testdata, count);
+		System.out.println(image3.width + "\t" + image3.height);
+		if(image3.monochrome == null) System.out.println("Null bitch");
 		
-		/* LOAD THE IMAGE */
-		Image image = new Image(imagename);
+		testdata = Segmentation.reduce(image3.monochrome, image3.width, image3.height);
+		image4 = new OCRImage(testdata, count);
 		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView();
-		picture.setImage(image);
+		testdata = Segmentation.reduce(image4.monochrome, image4.width, image4.height);
+		image5 = new OCRImage(testdata, count);
 		
+		WritableImage wr = getImage(image5.source);
+		
+		/* SET IT AS AN IMAGE VIEW */ 
+		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
 	}
 	

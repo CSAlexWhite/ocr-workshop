@@ -9,23 +9,23 @@ import javax.imageio.ImageIO;
 
 public class OCRImage {
 	
-	BufferedImage source;
+	public BufferedImage source;
 	
-	int width;
-	int height;
-	int cutoff;;
+	public int width;
+	public int height;
+	public int cutoff;;
 	
-	Color[][] color;
-	int[][][] rawData;
+	public Color[][] color;
+	public int[][][] rawData;
 	
-	int[][] grayscale;
-	int[][] monochrome;
+	public int[][] grayscale;
+	public int[][] monochrome;
 	
-	public OCRImage(String filename){
+	public OCRImage(String filename, int cutoff){
 		
 		try{ source = ImageIO.read(new File(filename));} 
 		
-		/* TODO MAYBE WANT TO DISPLAY A POPUP HERE */
+		/* TODO: Maybe display a popup here? */
 		catch (IOException ioe){ System.out.println("Couldn't read file.");}
 		
 		width = source.getWidth();
@@ -34,7 +34,35 @@ public class OCRImage {
 		color = Scanning.imageToColor(source, width, height);	
 		rawData = Scanning.expandColor(color, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
+		threshold(cutoff);
 			
+	}
+	
+	public OCRImage(BufferedImage preimage, int cutoff){
+		
+		source = preimage;
+		width = source.getWidth();
+		height = source.getHeight();
+		
+		color = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(color, width, height);
+		grayscale = Scanning.dataToGray(rawData, width, height);
+		threshold(cutoff);
+	}
+	
+	public OCRImage(int[][] inputData, int cutoff){
+		
+		width = inputData.length;
+		height = inputData[0].length;
+		
+		source = Scanning.colorToImage(
+					Scanning.dataToColor(inputData, width, height), 
+													width, height);
+			
+		color = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(color, width, height);
+		grayscale = Scanning.dataToGray(rawData, width, height);
+		threshold(cutoff);
 	}
 		
 	public void threshold(int cutoff){
@@ -61,6 +89,8 @@ public class OCRImage {
 				Scanning.dataToColor(monochrome, width, height), 
 												 width, height); 
 	}
+	
+	/****************************** I/O Operations ****************************/
 	
 	public void printData(){
 		
@@ -89,4 +119,8 @@ public class OCRImage {
 		    ImageIO.write(image, filetype, outputfile);
 		} catch (IOException e) {}
 	}
+	
+	/********************************** GETTERS *******************************/
+	
+
 }
