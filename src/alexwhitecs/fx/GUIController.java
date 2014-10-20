@@ -3,6 +3,7 @@ package alexwhitecs.fx;
 import java.awt.image.BufferedImage;
 
 import alexwhitecs.ocr.OCRImage;
+import alexwhitecs.ocr.Scanning;
 import alexwhitecs.ocr.Segmentation;
 import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
@@ -35,10 +36,10 @@ public class GUIController {
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
-		count = 180;
+		count = 120;
 		imagename = null;
 		
-		image1 = new OCRImage("letters.jpg", count);
+		image1 = new OCRImage("noisy.png", count);
 	}
 	
 	@FXML public void displayImage1(){
@@ -86,7 +87,7 @@ public class GUIController {
 		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
 		
-		tempImage = outImage;
+		tempImage = new OCRImage(outImage,count);
 	}
 	
 	@FXML public void contract(){
@@ -100,7 +101,21 @@ public class GUIController {
 		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
 		
-		tempImage = outImage;
+		tempImage = new OCRImage(outImage,count);
+	}
+	
+	@FXML public void denoise(){
+		
+		int[][] outdata = Scanning.denoise(tempImage.monochrome, tempImage.width, tempImage.height);
+		OCRImage outImage = new OCRImage(outdata, count);
+		
+		WritableImage wr = getImage(outImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);	
+		pictureframe2.setContent(picture);
+		
+		tempImage = new OCRImage(outImage,count);
 	}
 	
 	/*************************** PRIVATE METHODS ***********************/

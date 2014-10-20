@@ -61,7 +61,10 @@
                     <MenuItem mnemonicParsing="false" text="Delete" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Optical Scanning" />
+                <Menu mnemonicParsing="false" text="Optical Scanning">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#denoise" text="Noise Reduction" />
+                     </items></Menu>
                   <Menu mnemonicParsing="false" text="Segmentation">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#expand" text="Expand Image" />
