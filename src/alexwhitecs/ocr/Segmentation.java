@@ -5,17 +5,17 @@ import java.util.Vector;
 public abstract class Segmentation {
 	
 	
-	public static OCRImage getBlocks(OCRImage input, int width, int height, int iterations, int innerLoops){
+	public static OCRImage getBlocks(OCRImage input, int iterations, int innerLoops){
 		
 		int[][] testData = null;
-		OCRImage output = input;
+		OCRImage output = new OCRImage(input,input.cutoff);
 		
 		for(int i=0; i<iterations; i++){
 			
-			testData = Segmentation.reduce(output.monochrome, output.width, output.height, innerLoops);
+			testData = reduce(output.monochrome, output.width, output.height, innerLoops);
 			output = new OCRImage(testData, input.cutoff);
 					
-			testData = Segmentation.expand(output.monochrome, output.width, output.height, innerLoops);
+			testData = expand(output.monochrome, output.width, output.height, innerLoops);
 			output = new OCRImage(testData, input.cutoff);
 		}	
 		

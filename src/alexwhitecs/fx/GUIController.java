@@ -35,7 +35,7 @@ public class GUIController {
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
-		count = 200;
+		count = 180;
 		imagename = null;
 		
 		image1 = new OCRImage("letters.jpg", count);
@@ -61,31 +61,46 @@ public class GUIController {
 		System.out.println("width " + image2.width);
 		System.out.println("height " + image2.height);
 		
-		tempImage  //image1;
-				= new OCRImage(image2);
+		tempImage = new OCRImage(image2, count); //copy constructor absolutely not working...:(
 	}
 	
 	@FXML public void displayImage2(){
 		
-//		testdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 1);
-//		tempImage = new OCRImage(testdata, count);
-//				
-//		testdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 1);
-//		tempImage = new OCRImage(testdata, count);
-//		
-//		testdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 2);
-//		tempImage = new OCRImage(testdata, count);
-//				
-//		testdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 2);
-//		tempImage = new OCRImage(testdata, count);
+		OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
 		
-		tempImage = Segmentation.getBlocks(image1, image1.width, image1.height, 0, 1);
-		
-		WritableImage wr = getImage(tempImage.source);
+		WritableImage wr = getImage(outImage.source);
 		
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
+	}
+	
+	@FXML public void expand(){
+		
+		int[][] outdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 1);
+		OCRImage outImage = new OCRImage(outdata, count);
+		
+		WritableImage wr = getImage(outImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);	
+		pictureframe2.setContent(picture);
+		
+		tempImage = outImage;
+	}
+	
+	@FXML public void contract(){
+		
+		int[][] outdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 1);
+		OCRImage outImage = new OCRImage(outdata, count);
+		
+		WritableImage wr = getImage(outImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);	
+		pictureframe2.setContent(picture);
+		
+		tempImage = outImage;
 	}
 	
 	/*************************** PRIVATE METHODS ***********************/

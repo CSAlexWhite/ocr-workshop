@@ -15,7 +15,7 @@ public class OCRImage {
 	public int height;
 	public int cutoff;;
 	
-	public Color[][] color;
+	public Color[][] colorArray;
 	public int[][][] rawData;
 	
 	public int[][] grayscale;
@@ -31,8 +31,8 @@ public class OCRImage {
 		width = source.getWidth();
 		height = source.getHeight();
 		
-		color = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(color, width, height);
+		colorArray = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(colorArray, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
 			
@@ -43,8 +43,8 @@ public class OCRImage {
 		width = source.getWidth();
 		height = source.getHeight();
 		
-		color = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(color, width, height);
+		colorArray = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(colorArray, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
 		
@@ -62,55 +62,35 @@ public class OCRImage {
 					Scanning.dataToColor(inputData, width, height), 
 													width, height);
 			
-		color = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(color, width, height);
+		colorArray = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(colorArray, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
 	}
 	
-	public OCRImage(OCRImage preimage){
+	public OCRImage(OCRImage preimage, int cutoff){
 		
 		width = preimage.width;
-		height = preimage.height;		
-		cutoff = preimage.cutoff;
-		
-		color = new Color[width][height];
-		for(int i=0; i<width; i++){
-			for(int j=0; i<height; j++){
+		height = preimage.height;	
+		this.cutoff = cutoff;
 				
-				System.out.println(j);
-				color[i][j] = preimage.color[i][j];
-			}
-		}
+		//color = Scanning.imageToColor(preimage.source, width, height);
 		
-		color = Scanning.imageToColor(preimage.source, preimage.width, preimage.height);
+//		color = new Color[1000][1000];
+//		for(int i=0; i<1000; i++) color[i] = new Color[1000];
+//		
+//		for(int i=0; i<250; i++){
+//			for(int j=0; i<250; j++){
+//				color[i][j] = preimage.color[i][j];
+//			}
+//		}
 		
-		rawData = new int[width][height][4];
-		for(int i=0; i<width; i++){
-			for(int j=0; i<height; j++){
-				for(int k=0; k<4; k++){
-					
-					rawData[i][j][k] = preimage.rawData[i][j][k];
-				}
-			}
-		}
-		
-		grayscale = new int[width][height];
-		for(int i=0; i<width; i++){
-			for(int j=0; i<height; j++){
-	
-				grayscale[i][j] = preimage.grayscale[i][j];
-			}
-		}
-		
-		monochrome = new int[width][height]; 
-		for(int i=0; i<width; i++){
-			for(int j=0; i<height; j++){
-	
-				monochrome[i][j] = preimage.monochrome[i][j];
-			}
-		} 
-		
+		colorArray = preimage.colorArray;
+				
+		rawData = Scanning.expandColor(colorArray, width, height);
+		grayscale = Scanning.dataToGray(rawData, width, height);
+		threshold(cutoff);
+			
 		source = Scanning.colorToImage(
 				Scanning.dataToColor(monochrome, width, height), 
 												width, height); 

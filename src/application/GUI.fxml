@@ -62,7 +62,11 @@
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Optical Scanning" />
-                  <Menu mnemonicParsing="false" text="Segmentation" />
+                  <Menu mnemonicParsing="false" text="Segmentation">
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#expand" text="Expand Image" />
+                        <MenuItem mnemonicParsing="false" onAction="#contract" text="Contract Image" />
+                     </items></Menu>
                   <Menu mnemonicParsing="false" text="Preprocessing" />
                   <Menu mnemonicParsing="false" text="Feature Extraction" />
                   <Menu mnemonicParsing="false" text="Classification" />
