@@ -69,6 +69,7 @@
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#expand" text="Expand Image" />
                         <MenuItem mnemonicParsing="false" onAction="#contract" text="Contract Image" />
+                        <MenuItem mnemonicParsing="false" onAction="#horizontals" text="Horizonal Lines" />
                      </items></Menu>
                   <Menu mnemonicParsing="false" text="Preprocessing" />
                   <Menu mnemonicParsing="false" text="Feature Extraction" />

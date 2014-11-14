@@ -1,9 +1,95 @@
 package alexwhitecs.ocr;
 
+import java.util.Stack;
 import java.util.Vector;
 
 public abstract class Segmentation {
 	
+	public static OCRImage horizontals(OCRImage image){
+		
+		Stack<Integer> lines = getLines(image);
+		
+		OCRImage output1 = new OCRImage(image, image.cutoff);
+		
+		for(int i=0; i<image.height; i++){
+			
+			if(lines.contains(i)) for(int j=0; j<image.width; j++) output1.monochrome[j][i] = 0;
+		}
+		
+		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
+		
+		return output2;
+	}
+	
+	public static Stack<Integer> getLines(OCRImage input){
+			
+		Stack<Integer> emptyLines = new Stack<Integer>();
+		int hasBlack;
+		
+		for(int i=0; i<input.height; i++){	  // Find the empty lines which extend
+			hasBlack = 0;
+			
+			for(int j=0; j<input.width; j++){ // all the way across the page
+				
+				//System.out.print(input.monochrome[j][i]);
+				
+				if(input.monochrome[j][i] < input.cutoff){ // if the line has black
+					
+					hasBlack++;
+				}
+			}
+			
+			System.out.println(hasBlack);
+			
+			if(hasBlack==0){
+				
+				emptyLines.push(i);  // otherwise push that line index
+				//System.out.println(i);
+			}
+		}
+				
+		return getEdges(emptyLines);	
+	}
+	
+	/** 
+	 * Not that useful a function, but would look cool if I could finish it
+	 * @param input
+	 * @return
+	 */
+	public static Stack<Integer> getEdges(Stack<Integer> input){
+		
+		int threshold = 1;
+		
+		System.out.println(input.size());
+		
+		Stack<Integer> edges = new Stack<Integer>();
+		
+		// first, find the ranges of the groups, need to get the first/last of each group
+		
+		Integer temp1, temp2;
+		temp1 = input.pop();
+		edges.push(temp1);
+		
+		while(!input.empty()){
+			
+			temp2 = input.pop();
+				
+			if( Math.abs(temp2 - temp1) >= threshold){ 
+				
+				edges.push(temp2);
+			}
+			
+			if(input.empty()) break;
+			temp1 = input.pop();
+			
+			if( Math.abs(temp2 - temp1) >= threshold){ 
+				
+				edges.push(temp1);
+			}
+		}
+		
+		return edges;
+	}
 	
 	public static OCRImage getBlocks(OCRImage input, int iterations, int innerLoops){
 		

@@ -36,10 +36,10 @@ public class GUIController {
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
-		count = 120;
+		count = 20;
 		imagename = null;
 		
-		image1 = new OCRImage("noisy.png", count);
+		image1 = new OCRImage("normtext.jpg", count);
 	}
 	
 	@FXML public void displayImage1(){
@@ -47,8 +47,8 @@ public class GUIController {
 		image1.threshold(count += 1);
 		image2 = image1;
 		
-		System.out.println("width " + image2.width);
-		System.out.println("height " + image2.height);
+		//System.out.println("width " + image2.width);
+		//System.out.println("height " + image2.height);
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
@@ -74,6 +74,19 @@ public class GUIController {
 		/* SET IT AS AN IMAGE VIEW */
 		ImageView picture = new ImageView(wr);	
 		pictureframe2.setContent(picture);
+	}
+	
+	@FXML public void horizontals(){
+		
+		OCRImage outImage = Segmentation.horizontals(tempImage);
+		
+		WritableImage wr = getImage(outImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);	
+		pictureframe2.setContent(picture);
+		
+		tempImage = new OCRImage(outImage,count);
 	}
 	
 	@FXML public void expand(){
