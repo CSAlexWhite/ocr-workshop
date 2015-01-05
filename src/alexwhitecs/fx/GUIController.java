@@ -39,7 +39,7 @@ public class GUIController {
 		count = 20;
 		imagename = null;
 		
-		image1 = new OCRImage("normtext.jpg", count);
+		image1 = new OCRImage("segment2.jpg", count);
 	}
 	
 	@FXML public void displayImage1(){
@@ -59,10 +59,10 @@ public class GUIController {
 		ImageView picture = new ImageView(wr);	
 		pictureframe1.setContent(picture);
 		
-		System.out.println("width " + image2.width);
-		System.out.println("height " + image2.height);
+		//System.out.println("width " + image2.width);
+		//System.out.println("height " + image2.height);
 		
-		tempImage = new OCRImage(image2, count); //copy constructor absolutely not working...:(
+		tempImage = new OCRImage(image2, count); 
 	}
 	
 	@FXML public void displayImage2(){
@@ -79,6 +79,19 @@ public class GUIController {
 	@FXML public void horizontals(){
 		
 		OCRImage outImage = Segmentation.horizontals(tempImage);
+		
+		WritableImage wr = getImage(outImage.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);	
+		pictureframe2.setContent(picture);
+		
+		tempImage = new OCRImage(outImage,count);
+	}
+	
+	@FXML public void verticals(){
+		
+		OCRImage outImage = Segmentation.verticals(tempImage);
 		
 		WritableImage wr = getImage(outImage.source);
 		

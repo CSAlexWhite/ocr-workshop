@@ -5,9 +5,36 @@ import java.util.Vector;
 
 public abstract class Segmentation {
 	
+	public static OCRImage getGrid(OCRImage image){
+		
+		OCRImage temp1 = new OCRImage(image, image.cutoff);
+		temp1 = horizontals(temp1);
+		
+		OCRImage temp2 = new OCRImage(image, image.cutoff);
+		temp2 = horizontals(temp2);
+		
+		return overlay(temp1, temp2);
+	}
+	
+	public static OCRImage verticals(OCRImage image){
+		
+		Stack<Integer> lines = getHLines(image);
+		
+		OCRImage output1 = new OCRImage(image, image.cutoff);
+		
+		for(int i=0; i<image.width; i++){
+			
+			if(lines.contains(i)) for(int j=0; j<image.height; j++) output1.monochrome[i][j] = 0;
+		}
+		
+		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
+		
+		return output2;
+	}
+	
 	public static OCRImage horizontals(OCRImage image){
 		
-		Stack<Integer> lines = getLines(image);
+		Stack<Integer> lines = getVLines(image);
 		
 		OCRImage output1 = new OCRImage(image, image.cutoff);
 		
@@ -21,8 +48,38 @@ public abstract class Segmentation {
 		return output2;
 	}
 	
-	public static Stack<Integer> getLines(OCRImage input){
+	public static Stack<Integer> getHLines(OCRImage input){
 			
+		Stack<Integer> emptyLines = new Stack<Integer>();
+		int hasBlack;
+		
+		for(int i=0; i<input.width; i++){	  // Find the empty lines which extend
+			hasBlack = 0;
+			
+			for(int j=0; j<input.height; j++){ // all the way across the page
+				
+				//System.out.print(input.monochrome[j][i]);
+				
+				if(input.monochrome[i][j] < input.cutoff){ // if the line has black
+					
+					hasBlack++;
+				}
+			}
+			
+			System.out.println(hasBlack);
+			
+			if(hasBlack==0){
+				
+				emptyLines.push(i);  // otherwise push that line index
+				//System.out.println(i);
+			}
+		}
+				
+		return getEdges(emptyLines);	
+	}
+	
+	public static Stack<Integer> getVLines(OCRImage input){
+		
 		Stack<Integer> emptyLines = new Stack<Integer>();
 		int hasBlack;
 		
@@ -57,6 +114,8 @@ public abstract class Segmentation {
 	 * @return
 	 */
 	public static Stack<Integer> getEdges(Stack<Integer> input){
+		
+		if(input.isEmpty()) return new Stack<Integer>();
 		
 		int threshold = 1;
 		
@@ -150,6 +209,19 @@ public abstract class Segmentation {
 			}
 	
 		return output;
+	}
+	
+	public static OCRImage overlay(OCRImage input1, OCRImage input2){
+				
+		for(int i=0; i<input1.width; i++){			
+			for(int j=0; j<input1.height; j++){
+				
+				if(input1.monochrome[i][j] < input2.monochrome[i][j]) input1.monochrome[i][j] = input2.monochrome[i][j];
+				
+			}
+		}
+		
+		return input2;
 	}
 	
 	/* OLD PART */
