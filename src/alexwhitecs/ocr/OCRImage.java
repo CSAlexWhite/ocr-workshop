@@ -10,62 +10,37 @@ import javax.imageio.ImageIO;
 public class OCRImage {
 	
 	public BufferedImage source;
+	public Color[][] colorArray;	
 	
-	public int width;
-	public int height;
-	public int cutoff;;
+	public int[][][] rawData;	
+	public int[][] grayscale, monochrome;
+	public int width, height, cutoff;
 	
-	public Color[][] colorArray;
-	public int[][][] rawData;
-	
-	public int[][] grayscale;
-	public int[][] monochrome;
+	/******************************* CONSTRUCTORS *****************************/
 	
 	public OCRImage(String filename, int cutoff){
 		
 		try{ source = ImageIO.read(new File(filename));} 
-		
-		/* TODO: Maybe display a popup here? */
-		catch (IOException ioe){ System.out.println("Couldn't read file.");}
-		
-		width = source.getWidth();
-		height = source.getHeight();
-		
-		colorArray = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(colorArray, width, height);
-		grayscale = Scanning.dataToGray(rawData, width, height);
-		threshold(cutoff);
-			
+		catch (IOException ioe){ System.out.println("Couldn't read file.");}		
+		setArrays();			
 	}
 	
 	public OCRImage(BufferedImage preimage, int cutoff){
 		
-		width = source.getWidth();
-		height = source.getHeight();
-		
-		colorArray = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(colorArray, width, height);
-		grayscale = Scanning.dataToGray(rawData, width, height);
-		threshold(cutoff);
-		
+		setArrays();		
 		source = Scanning.colorToImage(
-				Scanning.dataToColor(monochrome, width, height), 
+				 Scanning.dataToColor(monochrome, width, height), 
 												width, height);
 	}
 	
 	public OCRImage(int[][] inputData, int cutoff){
 		
 		width = inputData.length;
-		height = inputData[0].length;
-		
+		height = inputData[0].length;		
 		source = Scanning.colorToImage(
 					Scanning.dataToColor(inputData, width, height), 
-													width, height);
-			
-		colorArray = Scanning.imageToColor(source, width, height);	
-		rawData = Scanning.expandColor(colorArray, width, height);
-		grayscale = Scanning.dataToGray(rawData, width, height);
-		threshold(cutoff);
+													width, height);			
+		setArrays();
 	}
 	
 	public OCRImage(OCRImage preimage, int cutoff){
@@ -74,8 +49,12 @@ public class OCRImage {
 		height = preimage.height;	
 		this.cutoff = cutoff;
 		
-		colorArray = preimage.colorArray;
-				
+		colorArray = new Color[width][height];	// MAKES SURE TO REFERENCES ARE
+		for(int i=0; i<width; i++){				// REMOVEd
+			for(int j=0; j<height; j++) 
+				colorArray[i][j] = new Color(preimage.colorArray[i][j].getRGB());
+		}
+							
 		rawData = Scanning.expandColor(colorArray, width, height);
 		grayscale = Scanning.dataToGray(rawData, width, height);
 		threshold(cutoff);
@@ -83,31 +62,6 @@ public class OCRImage {
 		source = Scanning.colorToImage(
 				Scanning.dataToColor(monochrome, width, height), 
 												width, height); 
-	}
-		
-	public void threshold(int cutoff){
-		
-		monochrome = Scanning.grayToMono(cutoff, grayscale, width, height);
-	}
-	
-
-	public BufferedImage getColorImage(){
-		
-		return source;
-	}
-	
-	public BufferedImage getGrayscaleImage(){
-	
-		return 	Scanning.colorToImage(
-				Scanning.dataToColor(grayscale, width, height), 
-												width, height);
-	}
-	
-	public BufferedImage getMonochromeImage(){
-	
-		return 	Scanning.colorToImage(
-				Scanning.dataToColor(monochrome, width, height), 
-												 width, height); 
 	}
 	
 	/****************************** I/O Operations ****************************/
@@ -142,5 +96,43 @@ public class OCRImage {
 	
 	/********************************** GETTERS *******************************/
 	
+
+	public BufferedImage getColorImage(){
+		
+		return source;
+	}
+	
+	public BufferedImage getGrayscaleImage(){
+	
+		return 	Scanning.colorToImage(
+				Scanning.dataToColor(grayscale, width, height), 
+												width, height);
+	}
+	
+	public BufferedImage getMonochromeImage(){
+	
+		return 	Scanning.colorToImage(
+				Scanning.dataToColor(monochrome, width, height), 
+												 width, height); 
+	}
+	
+	/********************************** SETTERS *******************************/
+	
+	private void setArrays(){
+		
+		width = source.getWidth();
+		height = source.getHeight();
+		
+		colorArray = Scanning.imageToColor(source, width, height);	
+		rawData = Scanning.expandColor(colorArray, width, height);
+		grayscale = Scanning.dataToGray(rawData, width, height);
+		threshold(cutoff);
+	}
+	
+	
+	public void threshold(int cutoff){
+		
+		monochrome = Scanning.grayToMono(cutoff, grayscale, width, height);
+	}
 
 }

@@ -39,7 +39,7 @@ public class GUIController {
 		count = 20;
 		imagename = null;
 		
-		image1 = new OCRImage("segment2.jpg", count);
+		image1 = new OCRImage("normtext.jpg", count);
 	}
 	
 	@FXML public void displayImage1(){

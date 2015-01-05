@@ -48,6 +48,14 @@ public abstract class Segmentation {
 		return output2;
 	}
 	
+	
+	/**
+	 * Takes an OCRImage input and for each horizontal line:
+	 * (1) Counts black pixels
+	 * (2) If count is zero, adds that row to the stack
+	 * @param input
+	 * @return
+	 */
 	public static Stack<Integer> getHLines(OCRImage input){
 			
 		Stack<Integer> emptyLines = new Stack<Integer>();
@@ -78,6 +86,13 @@ public abstract class Segmentation {
 		return getEdges(emptyLines);	
 	}
 	
+	/**
+	 * Takes an OCRImage input and for each vertical line:
+	 * (1) Counts black pixels
+	 * (2) If count is zero, adds that row to the stack
+	 * @param input
+	 * @return
+	 */
 	public static Stack<Integer> getVLines(OCRImage input){
 		
 		Stack<Integer> emptyLines = new Stack<Integer>();

@@ -3,9 +3,9 @@ package alexwhitecs.ocr;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
-public abstract class Scanning {
+public class Scanning {
 	
-
+	/** Takes a BufferedImage and its dimensions and returns an array of Colors */
 	public static Color[][] imageToColor(BufferedImage input, int width, int height){
 		
 		Color[][] output = new Color[width][height];
@@ -21,6 +21,7 @@ public abstract class Scanning {
 		return output;
 	}
 	
+	/** Takes an array of Colors and its dimensions and returns a BufferedImage */
 	public static BufferedImage colorToImage(Color[][] inData, int width, int height){
 		
 		Color[][] image = inData;
@@ -37,6 +38,8 @@ public abstract class Scanning {
 		return bufferedImage;
 	}
 	
+	/** Tales an array of Colors and returns a separated 3D Array of its 
+	 * constituent RGBA components */
 	public static int[][][] expandColor(Color[][] input, int width, int height){
 						
 		int[][][] output = new int[width][height][4];
@@ -54,6 +57,7 @@ public abstract class Scanning {
 		return output;	
 	}
 	
+	/** Takes a separated 3D RGBA array and returns it to a 2D Color array */
 	public static Color[][] reverseExpansion(int[][][] data, int width, int height){
 		
 		Color[][] toReturn = new Color[width][height];
@@ -74,6 +78,8 @@ public abstract class Scanning {
 		return toReturn;
 	}
 	
+	/** Takes a separated 3D RGBA array, performs grayscaling and returns a 
+	 * grayscale array */
 	public static int[][] dataToGray(int[][][] data, int width, int height){
 			
 		int[][] toReturn = new int[width][height];
@@ -87,6 +93,7 @@ public abstract class Scanning {
 		return toReturn;
 	}
 	
+	/** Takes a grayscale array and thresholds it to black and white */
 	public static int[][] grayToMono(int cutoff, int[][] input, int width, int height){
 		
 		int[][] output = new int[width][height];
@@ -102,7 +109,7 @@ public abstract class Scanning {
 		return output;
 	}
 	
-	
+	/** Takes some 2D array and converts it to a Color array */
 	public static Color[][] dataToColor(int[][] input, int width, int height){
 		
 		int value = 0;
