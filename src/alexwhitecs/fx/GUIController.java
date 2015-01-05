@@ -47,104 +47,65 @@ public class GUIController {
 		image1.threshold(count += 1);
 		image2 = image1;
 		
-		//System.out.println("width " + image2.width);
-		//System.out.println("height " + image2.height);
-		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
 		
-		WritableImage wr = getImage(image1.getMonochromeImage());
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe1.setContent(picture);
-		
-		//System.out.println("width " + image2.width);
-		//System.out.println("height " + image2.height);
-		
-		tempImage = new OCRImage(image2, count); 
+		display(image1, 1);
 	}
 	
 	@FXML public void displayImage2(){
 		
 		OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
+		display(outImage, 2);
 	}
 	
 	@FXML public void horizontals(){
 		
-		OCRImage outImage = Segmentation.horizontals(tempImage);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
-		
-		tempImage = new OCRImage(outImage,count);
+		OCRImage outImage = Segmentation.horizontals(tempImage);		
+		display(outImage, 2);
 	}
 	
 	@FXML public void verticals(){
 		
 		OCRImage outImage = Segmentation.verticals(tempImage);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
-		
-		tempImage = new OCRImage(outImage,count);
+		display(outImage, 2);
 	}
 	
 	@FXML public void expand(){
 		
 		int[][] outdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 1);
 		OCRImage outImage = new OCRImage(outdata, count);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
-		
-		tempImage = new OCRImage(outImage,count);
+		display(outImage, 2);
 	}
 	
 	@FXML public void contract(){
 		
 		int[][] outdata = Segmentation.reduce(tempImage.monochrome, tempImage.width, tempImage.height, 1);
 		OCRImage outImage = new OCRImage(outdata, count);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
-		
-		tempImage = new OCRImage(outImage,count);
+		display(outImage, 2);
 	}
 	
 	@FXML public void denoise(){
 		
 		int[][] outdata = Scanning.denoise(tempImage.monochrome, tempImage.width, tempImage.height);
 		OCRImage outImage = new OCRImage(outdata, count);
-		
-		WritableImage wr = getImage(outImage.source);
-		
-		/* SET IT AS AN IMAGE VIEW */
-		ImageView picture = new ImageView(wr);	
-		pictureframe2.setContent(picture);
-		
-		tempImage = new OCRImage(outImage,count);
+		display(outImage, 2);
 	}
 	
 	/*************************** PRIVATE METHODS ***********************/
+	
+	private void display(OCRImage image, int frame){
+		
+		WritableImage wr = getImage(image.source);
+		
+		/* SET IT AS AN IMAGE VIEW */
+		ImageView picture = new ImageView(wr);
+		
+		if(frame == 1) pictureframe1.setContent(picture);
+		if(frame == 2) pictureframe2.setContent(picture);
+		
+		tempImage = new OCRImage(image,count);
+	}
 	
 	private WritableImage getImage(BufferedImage input){
 		

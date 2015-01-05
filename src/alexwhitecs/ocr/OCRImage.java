@@ -73,17 +73,6 @@ public class OCRImage {
 		width = preimage.width;
 		height = preimage.height;	
 		this.cutoff = cutoff;
-				
-		//color = Scanning.imageToColor(preimage.source, width, height);
-		
-//		color = new Color[1000][1000];
-//		for(int i=0; i<1000; i++) color[i] = new Color[1000];
-//		
-//		for(int i=0; i<250; i++){
-//			for(int j=0; i<250; j++){
-//				color[i][j] = preimage.color[i][j];
-//			}
-//		}
 		
 		colorArray = preimage.colorArray;
 				
