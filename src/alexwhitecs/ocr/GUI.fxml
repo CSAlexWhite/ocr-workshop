@@ -26,13 +26,15 @@
             <RowConstraints maxHeight="456.0" minHeight="6.0" prefHeight="16.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="456.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="400.0" minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="456.0" minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="456.0" minHeight="15.0" prefHeight="10.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="193.0" minHeight="0.0" prefHeight="60.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="242.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="249.0" minHeight="10.0" prefHeight="14.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox alignment="CENTER" prefHeight="222.0" prefWidth="448.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
+            <HBox alignment="CENTER_LEFT" prefHeight="222.0" prefWidth="448.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <children>
                   <Button mnemonicParsing="false" onAction="#displayImage1" text="Increment Threshold" />
                   <TextArea fx:id="thresholdOutInt" editable="false" maxHeight="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="50.0">
@@ -44,11 +46,6 @@
             </HBox>
             <ScrollPane fx:id="pictureframe1" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
             <ScrollPane fx:id="pictureframe2" minHeight="400.0" minWidth="400.0" prefHeight="400.0" prefWidth="400.0" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="6">
-               <children>
-                  <Button mnemonicParsing="false" onAction="#displayImage2" text="Load Original" />
-               </children>
-            </HBox>
             <MenuBar prefHeight="25.0" prefWidth="583.0" GridPane.columnSpan="7" GridPane.rowIndex="1">
               <menus>
                 <Menu mnemonicParsing="false" text="File">
@@ -99,16 +96,25 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <ProgressBar fx:id="thresholdOutVis" prefHeight="18.0" prefWidth="423.0" progress="0.0" />
+                        <Button mnemonicParsing="false" onAction="#displayImage2" text="Load Original" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                  <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
+                     <children>
+                        <ProgressBar fx:id="thresholdOutVis" prefHeight="18.0" prefWidth="423.0" progress="0.0" />
+                     </children></HBox>
                </children>
             </GridPane>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnIndex="6" GridPane.rowIndex="3" GridPane.rowSpan="6" />
-            <Pane layoutX="10.0" layoutY="65.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.rowIndex="3" GridPane.rowSpan="6" />
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="8" />
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnIndex="6" GridPane.rowIndex="3" GridPane.rowSpan="8" />
+            <Pane layoutX="10.0" layoutY="65.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.rowIndex="3" GridPane.rowSpan="8" />
+            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="10" />
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnSpan="7" GridPane.rowIndex="2" />
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.columnIndex="4" GridPane.rowIndex="6" GridPane.rowSpan="3">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+              </content>
+            </ScrollPane>
          </children>
          <HBox.margin>
             <Insets />

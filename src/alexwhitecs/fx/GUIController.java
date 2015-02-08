@@ -36,7 +36,7 @@ public class GUIController {
 	public GUIController(){
 		
 		thresholdOutInt = new TextArea();
-		count = 20;
+		count = 100;
 		imagename = null;
 		
 		image1 = new OCRImage("normtext.jpg", count);
@@ -45,18 +45,21 @@ public class GUIController {
 	@FXML public void displayImage1(){
 		
 		image1.threshold(count += 1);
-		image2 = image1;
 		
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
 		
 		display(image1, 1);
+		System.out.println("Image 1: Threshold = " + image1.cutoff);
+		System.out.println("Count = " + count);
+		
+		horizontals();
 	}
 	
 	@FXML public void displayImage2(){
 		
-		OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
-		display(outImage, 2);
+		//OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
+		display(image1, 2);
 	}
 	
 	@FXML public void horizontals(){

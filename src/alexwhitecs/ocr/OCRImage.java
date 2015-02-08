@@ -22,7 +22,14 @@ public class OCRImage {
 		
 		try{ source = ImageIO.read(new File(filename));} 
 		catch (IOException ioe){ System.out.println("Couldn't read file.");}		
-		setArrays();			
+		
+        width = source.getWidth();
+        height = source.getHeight();
+        
+        colorArray = Scanning.imageToColor(source, width, height);    
+        rawData = Scanning.expandColor(colorArray, width, height);
+        grayscale = Scanning.dataToGray(rawData, width, height);
+        threshold(cutoff);	
 	}
 	
 	public OCRImage(BufferedImage preimage, int cutoff){
@@ -48,6 +55,8 @@ public class OCRImage {
 		width = preimage.width;
 		height = preimage.height;	
 		this.cutoff = cutoff;
+		
+//		colorArray = preimage.colorArray;
 		
 		colorArray = new Color[width][height];	// MAKES SURE TO REFERENCES ARE
 		for(int i=0; i<width; i++){				// REMOVEd
@@ -132,6 +141,7 @@ public class OCRImage {
 	
 	public void threshold(int cutoff){
 		
+		this.cutoff = cutoff;
 		monochrome = Scanning.grayToMono(cutoff, grayscale, width, height);
 	}
 
