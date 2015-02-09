@@ -87,25 +87,6 @@ public class OCRImage {
 												width, height); 
 	}
 	
-	public OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2){
-		
-		int[][] imageArray = new int[x2-x1][y2-y1];
-		int k = 0, l = 0;
-		
-		for(int i=x1; i<x2; i++){
-			
-			for(int j=y1; j<y2; j++){
-				
-				imageArray[k][l] = preimage.monochrome[i][j];						
-				l++;		
-			}
-			
-			k++;
-		}
-				
-		return new OCRImage(imageArray, preimage.cutoff);
-	}
-	
 	/****************************** I/O Operations ****************************/
 	
 	public void printData(){
@@ -176,7 +157,6 @@ public class OCRImage {
 		
 		this.cutoff = cutoff;
 		monochrome = Scanning.grayToMono(cutoff, grayscale, width, height);
-		//reload();
 	}
 	
 	public void changeThreshold(int cutoff){
@@ -193,6 +173,5 @@ public class OCRImage {
 		source = Scanning.colorToImage(
 				 Scanning.dataToColor(monochrome, width, height), 
 												  width, height);			
-		//setArrays();
 	}
 }

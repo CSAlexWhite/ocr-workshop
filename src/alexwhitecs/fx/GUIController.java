@@ -74,6 +74,12 @@ public class GUIController {
 		display(image1, 2);
 	}
 	
+	@FXML public void segment(){
+		
+		image2 = Segmentation.chop(image1);
+		display(image2, 2);
+	}
+	
 	@FXML public void showHorizontals(){
 						
 		display(image1, 2);		

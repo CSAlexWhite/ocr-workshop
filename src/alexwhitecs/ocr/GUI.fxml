@@ -111,7 +111,10 @@
             <Pane layoutX="10.0" layoutY="65.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.rowIndex="3" GridPane.rowSpan="8" />
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="10" />
             <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: gray;" GridPane.columnSpan="7" GridPane.rowIndex="2" />
-            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="8">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#segment" text="Test" />
+               </children></HBox>
             <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.columnIndex="4" GridPane.rowIndex="6" GridPane.rowSpan="3">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />

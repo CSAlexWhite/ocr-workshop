@@ -1,5 +1,6 @@
 package alexwhitecs.ocr;
 
+import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
@@ -16,12 +17,69 @@ public abstract class Segmentation {
 		return overlay(temp1, temp2);
 	}
 	
-	public static void chop(OCRImage image){
+	public static OCRImage chop(OCRImage image){
 		
 		Vector<OCRImage> frames = new Vector<OCRImage>();
+		Vector<Integer> xCoords = new Vector<Integer>();
+		Vector<Integer> yCoords = new Vector<Integer>();
+		Integer x1, x2, y1, y2;
 		
+		OCRImage returnImage = null;
+				
+//		while(true){		
+//			
+			yCoords = getHLines(image);
+			xCoords = getVLines(image);
+			
+			System.out.println(image.width + " " + image.height);
+			
+//			while(yCoords.size()>1){
+//				
+//				while(xCoords.size()>1){
+					
+//					y1 = 0;
+//					y2 = image.height-1;
+					x1 = xCoords.remove(0);
+					x2 = xCoords.elementAt(0);
+			
+//					y1 = yCoords.remove(0);
+//					y2 = yCoords.elementAt(0);
+					y1 = 0;
+					y2 = image.height - 1;
+					
+//					frames.add(selectFrom(image, x1, x2, y1, y2));
+					System.out.println(x1 + " " + x2 + " " + y1 + " " + y2);
+					returnImage = selectFrom(image, x1, x2, y1, y2);
+//				}
+//			}
+//		}
+			
+		return returnImage;
+	}
+	
+	public static OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2){
 		
+		int height = Math.abs(x2-x1);
+		int width = Math.abs(y2-y1);
+		int[][] imageArray = new int[width][height];
+
+		System.out.println("width = " + width);
+		System.out.println("height = " + height);
 		
+		int k = 0; 		
+		for(int i=y1; i<y2; i++){
+			
+			int l = 0;
+			for(int j=x1; j<x2; j++){
+				
+				imageArray[k][l] = preimage.monochrome[i][j];						
+				l++;		
+			}
+			
+			k++;
+		}
+				
+		return new OCRImage(imageArray, preimage.cutoff);
 	}
 	
 	/**
@@ -116,6 +174,14 @@ public abstract class Segmentation {
 			else edges.add(emptyLines.elementAt(i));
 		}
 		
+		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
+		System.out.println();
+		
+		edges.sort(new IntegerComparator());
+		
+		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
+		System.out.println();
+		
 		return edges;
 		//return getEdges(emptyLines);	
 	}
@@ -167,6 +233,16 @@ public abstract class Segmentation {
 			if(emptyLines.elementAt(i)-emptyLines.elementAt(i-1) == 1) continue;
 			else edges.add(emptyLines.elementAt(i));
 		}
+		
+		
+		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
+		System.out.println();
+		
+		edges.sort(new IntegerComparator());
+		
+		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
+		System.out.println();
+		
 		
 		return edges;
 		//return getEdges(emptyLines);	
