@@ -1,6 +1,7 @@
 package alexwhitecs.fx;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 import alexwhitecs.ocr.OCRImage;
 import alexwhitecs.ocr.Scanning;
@@ -12,8 +13,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class GUIController {
+	
+	Stage primaryStage;
 	
 	@FXML ScrollPane pictureframe1;
 	@FXML ScrollPane pictureframe2;
@@ -39,10 +44,26 @@ public class GUIController {
 		count = 100;
 		imagename = null;
 		
-		image1 = new OCRImage("normtext.jpg", count);
+		
 	}
 	
-	@FXML public void displayImage1(){
+	public void setStage(Stage inStage){
+		
+		primaryStage = inStage;
+	}
+	
+	@FXML public void loadImage(){
+		
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open Resource File");
+		fileChooser.setInitialDirectory(new File("D:\\Dropbox\\{Java Workspace}\\OCR-TestBed"));
+		File file = fileChooser.showOpenDialog(primaryStage);
+		
+		image1 = new OCRImage(file, count);
+		display(image1, 1);
+	}
+	
+	@FXML public void showHorizontals(){
 		
 		image1.threshold(count += 1);
 		
@@ -56,10 +77,17 @@ public class GUIController {
 		horizontals();
 	}
 	
-	@FXML public void displayImage2(){
+	@FXML public void showGrid(){
+		
+		display(image1, 2);
+		grid();
+	}
+	
+	@FXML public void showVerticals(){
 		
 		//OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
 		display(image1, 2);
+		verticals();
 	}
 	
 	@FXML public void horizontals(){
@@ -68,9 +96,17 @@ public class GUIController {
 		display(outImage, 2);
 	}
 	
+	
+	
 	@FXML public void verticals(){
 		
 		OCRImage outImage = Segmentation.verticals(tempImage);
+		display(outImage, 2);
+	}
+	
+	public void grid(){
+		
+		OCRImage outImage = Segmentation.getGrid(tempImage);
 		display(outImage, 2);
 	}
 	

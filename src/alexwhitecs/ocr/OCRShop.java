@@ -1,17 +1,16 @@
 package alexwhitecs.ocr;
 	
+import alexwhitecs.fx.GUIController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.fxml.FXMLLoader;
-
 
 public class OCRShop extends Application {
 	
 	static HBox root;
+	static GUIController controller;
 	
 	public static void main(String[] args) {
 		
@@ -22,8 +21,14 @@ public class OCRShop extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			
+			FXMLLoader fxmlloader = new FXMLLoader();
+			fxmlloader.setLocation(getClass().getResource("GUI.fxml"));
+			
 			root = (HBox)FXMLLoader
 				.load(getClass().getResource("GUI.fxml"));
+			
+			controller = (GUIController) fxmlloader.getController();
+			//controller.setStage(primaryStage);
 						
 			Scene scene = new Scene(root);
 			scene.getStylesheets()

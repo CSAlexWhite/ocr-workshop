@@ -32,6 +32,20 @@ public class OCRImage {
         threshold(cutoff);	
 	}
 	
+	public OCRImage(File file, int cutoff){
+		
+		try{ source = ImageIO.read(file);} 
+		catch (IOException ioe){ System.out.println("Couldn't read file.");}		
+		
+        width = source.getWidth();
+        height = source.getHeight();
+        
+        colorArray = Scanning.imageToColor(source, width, height);    
+        rawData = Scanning.expandColor(colorArray, width, height);
+        grayscale = Scanning.dataToGray(rawData, width, height);
+        threshold(cutoff);	
+	}
+	
 	public OCRImage(BufferedImage preimage, int cutoff){
 		
 		setArrays();		

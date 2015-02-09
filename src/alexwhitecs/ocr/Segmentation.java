@@ -11,14 +11,28 @@ public abstract class Segmentation {
 		temp1 = horizontals(temp1);
 		
 		OCRImage temp2 = new OCRImage(image, image.cutoff);
-		temp2 = horizontals(temp2);
+		temp2 = verticals(temp2);
 		
 		return overlay(temp1, temp2);
 	}
 	
+	public static void chop(OCRImage image){
+		
+		Vector<OCRImage> frames = new Vector<OCRImage>();
+		
+		
+		
+	}
+	
+	/**
+	 * A method to help display the vertical lines created during segmentation, 
+	 * mainly for debugging.
+	 * @param image
+	 * @return
+	 */
 	public static OCRImage verticals(OCRImage image){
 		
-		Stack<Integer> lines = getHLines(image);
+		Vector<Integer> lines = getHLines(image);
 		
 		OCRImage output1 = new OCRImage(image, image.cutoff);
 		
@@ -32,9 +46,15 @@ public abstract class Segmentation {
 		return output2;
 	}
 	
+	/**
+	 * A method to help display the horizontal lines created during segmentation,
+	 * mainly for debugging.
+	 * @param image
+	 * @return
+	 */
 	public static OCRImage horizontals(OCRImage image){
 		
-		Stack<Integer> lines = getVLines(image);
+		Vector<Integer> lines = getVLines(image);
 		
 		OCRImage output1 = new OCRImage(image, image.cutoff);
 		
@@ -56,9 +76,9 @@ public abstract class Segmentation {
 	 * @param input
 	 * @return
 	 */
-	public static Stack<Integer> getHLines(OCRImage input){
+	public static Vector<Integer> getHLines(OCRImage input){
 			
-		Stack<Integer> emptyLines = new Stack<Integer>();
+		Vector<Integer> emptyLines = new Vector<Integer>();
 		int hasBlack;
 		
 		for(int i=0; i<input.width; i++){	  // Find the empty lines which extend
@@ -74,16 +94,30 @@ public abstract class Segmentation {
 				}
 			}
 			
-			System.out.println(hasBlack);
-			
+			//System.out.println(hasBlack);			
 			if(hasBlack==0){
 				
-				emptyLines.push(i);  // otherwise push that line index
+				emptyLines.add(i);  // otherwise push that line index
 				//System.out.println(i);
 			}
 		}
-				
-		return getEdges(emptyLines);	
+		
+		Vector<Integer> edges = new Vector<Integer>();
+		
+		for(int i=0; i<emptyLines.size()-1; i++){
+			
+			if(emptyLines.elementAt(i+1)-emptyLines.elementAt(i) == 1) continue;
+			else edges.add(emptyLines.elementAt(i));
+		}
+		
+		for(int i=emptyLines.size()-1; i>0; i--){
+			
+			if(emptyLines.elementAt(i)-emptyLines.elementAt(i-1) == 1) continue;
+			else edges.add(emptyLines.elementAt(i));
+		}
+		
+		return edges;
+		//return getEdges(emptyLines);	
 	}
 	
 	/**
@@ -93,9 +127,9 @@ public abstract class Segmentation {
 	 * @param input
 	 * @return
 	 */
-	public static Stack<Integer> getVLines(OCRImage input){
+	public static Vector<Integer> getVLines(OCRImage input){
 		
-		Stack<Integer> emptyLines = new Stack<Integer>();
+		Vector<Integer> emptyLines = new Vector<Integer>();
 		int hasBlack;
 		
 		for(int i=0; i<input.height; i++){	  // Find the empty lines which extend
@@ -111,16 +145,31 @@ public abstract class Segmentation {
 				}
 			}
 			
-			System.out.println(hasBlack);
+			//System.out.println(hasBlack);
 			
 			if(hasBlack==0){
 				
-				emptyLines.push(i);  // otherwise push that line index
+				emptyLines.add(i);  // otherwise push that line index
 				//System.out.println(i);
 			}
 		}
-				
-		return getEdges(emptyLines);	
+		
+		Vector<Integer> edges = new Vector<Integer>();
+		
+		for(int i=0; i<emptyLines.size()-1; i++){
+			
+			if(emptyLines.elementAt(i+1)-emptyLines.elementAt(i) == 1) continue;
+			else edges.add(emptyLines.elementAt(i));
+		}
+		
+		for(int i=emptyLines.size()-1; i>0; i--){
+			
+			if(emptyLines.elementAt(i)-emptyLines.elementAt(i-1) == 1) continue;
+			else edges.add(emptyLines.elementAt(i));
+		}
+		
+		return edges;
+		//return getEdges(emptyLines);	
 	}
 	
 	/** 
@@ -134,7 +183,7 @@ public abstract class Segmentation {
 		
 		int threshold = 1;
 		
-		System.out.println(input.size());
+		//System.out.println(input.size());
 		
 		Stack<Integer> edges = new Stack<Integer>();
 		
