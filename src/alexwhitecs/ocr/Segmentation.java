@@ -20,49 +20,73 @@ public abstract class Segmentation {
 	public static Vector<OCRImage> chop(OCRImage image){
 		
 		Vector<OCRImage> rows = new Vector<OCRImage>();
+		Vector<OCRImage> cols = new Vector<OCRImage>();
 		Vector<OCRImage> letters = new Vector<OCRImage>();
 		
 		Vector<Integer> xCoords = new Vector<Integer>();
 		Vector<Integer> yCoords = new Vector<Integer>();
-		Integer x1, x2, y1, y2;
-		
-								
-//		yCoords = getHLines(image);
-		xCoords = getVLines(image);
-		
-		//System.out.println(image.width + " " + image.height);
-		
-		while(xCoords.size()>1){
+		int x1, x2, y1, y2;
+										
+		xCoords = getVLines(image);		
 			
-			y1 = 0;
-			y2 = image.width;
+		y1 = 0;
+		y2 = image.width;
+
+		x1 = xCoords.remove(0);
+		x2 = xCoords.elementAt(0);
+		
+		if(x1 != x2) rows.add(selectFrom(image, x1, x2, y1, y2));
+		
+		while(xCoords.size()>0){
+			
+			System.out.println("x1: " + x1 + ", x2: " + x2);
 	
-			x1 = xCoords.remove(0);
-			x2 = xCoords.elementAt(0);
+			x1 = x2;
+			x2 = xCoords.remove(0);
+			
+			if(x2 == x1) continue;
 			
 			rows.add(selectFrom(image, x1, x2, y1, y2));
 		}
 		
-//		for(int i=0; i<rows.size(); i++){
-//			
-//			yCoords = getHLines(rows.elementAt(i));
-//			
-//			System.out.println(yCoords.size());
-//			
-//			while(yCoords.size()>1){
-//				
-//				x1 = 0;
-//				x2 = image.height;
-//		
-//				y1 = xCoords.remove(0);
-//				y2 = xCoords.elementAt(0);
-//				
-//				letters.add(selectFrom(image, x1, x2, y1, y2));
-//			}
-//		}
+		for(int i=0; i<rows.size(); i++){
 			
-		System.out.println(rows.size());
-		return rows;
+			if(isEmpty(rows.elementAt(i))){ 
+				
+				rows.removeElementAt(i);
+			}
+		}
+		
+	
+		for(int i=0; i<rows.size(); i++){
+			
+			OCRImage image2 = rows.elementAt(i);
+			yCoords = getHLines(image2);
+			System.out.println(yCoords.size());
+			
+			x1 = 0;
+			x2 = image2.height;
+	
+			y1 = yCoords.remove(0);
+			y2 = yCoords.elementAt(0);
+			
+			if(y1 != y2) letters.add(selectFrom(image2, x1, x2, y1, y2));
+			
+			while(yCoords.size()>1){
+				
+				System.out.println("y1: " + y1 + ", y2: " + y2);
+		
+				y1 = y2;
+				y2 = yCoords.remove(0);
+				
+				if(y1 == y2) continue;
+				
+				letters.add(selectFrom(image2,x1, x2, y1, y2));
+			}
+		}		
+		
+		System.out.println("letters: " + letters.size());
+		return letters;
 	}
 	
 	public static OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2){
@@ -70,9 +94,6 @@ public abstract class Segmentation {
 		int height = Math.abs(x2-x1);
 		int width = Math.abs(y2-y1);
 		int[][] imageArray = new int[width][height];
-
-//		System.out.println("width = " + width);
-//		System.out.println("height = " + height);
 		
 		int k = 0; 		
 		for(int i=y1; i<y2; i++){
@@ -86,8 +107,29 @@ public abstract class Segmentation {
 			
 			k++;
 		}
-				
+		
 		return new OCRImage(imageArray, preimage.cutoff);
+	}
+	
+	public static boolean isEmpty(OCRImage input){
+		
+		input = new OCRImage(input, input.cutoff);
+
+		
+		for(int i=0; i<input.width; i++){
+			
+			for(int j=0; j<input.height; j++){
+				
+				if(input.grayscale[i][j] < input.cutoff){ 
+					
+					return false;
+				}
+				
+			}
+
+		}
+		
+		return true;
 	}
 	
 	/**
@@ -145,6 +187,8 @@ public abstract class Segmentation {
 	public static Vector<Integer> getHLines(OCRImage input){
 			
 		Vector<Integer> emptyLines = new Vector<Integer>();
+		emptyLines.add(0);
+		emptyLines.add(input.width-1);
 		int hasBlack;
 		
 		for(int i=0; i<input.width; i++){	  // Find the empty lines which extend
@@ -205,6 +249,9 @@ public abstract class Segmentation {
 		
 		Vector<Integer> emptyLines = new Vector<Integer>();
 		int hasBlack;
+		
+		emptyLines.add(0);
+		emptyLines.add(input.height-1);
 		
 		for(int i=0; i<input.height; i++){	  // Find the empty lines which extend
 			hasBlack = 0;

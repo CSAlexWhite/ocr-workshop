@@ -174,4 +174,9 @@ public class OCRImage {
 				 Scanning.dataToColor(monochrome, width, height), 
 												  width, height);			
 	}
+	
+	public void recalcMono(){
+		
+		setArrays();
+	}
 }

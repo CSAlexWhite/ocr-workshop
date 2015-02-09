@@ -75,14 +75,16 @@ public class GUIController {
 		display(image1, 2);
 	}
 	
-	int i=0;
+	int i=0; boolean init = false;
 	Vector<OCRImage> images	= null;	
 	@FXML public void segment(){
 		
 		System.out.println(i);
-		if(i==0) images = Segmentation.chop(image1);
-		image1 = images.elementAt(i++);
+		if(!init) images = Segmentation.chop(image1);
+		init = true;
+		image1 = images.elementAt(i);
 		display(image1, 2);
+		i = (i+1)%(images.size());
 	}
 	
 	@FXML public void showHorizontals(){
