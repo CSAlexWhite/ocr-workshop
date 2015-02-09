@@ -36,7 +36,7 @@
          <children>
             <HBox alignment="CENTER_LEFT" prefHeight="222.0" prefWidth="448.0" GridPane.columnIndex="2" GridPane.rowIndex="6">
                <children>
-                  <Button mnemonicParsing="false" text="Increment Threshold" />
+                  <Button mnemonicParsing="false" onAction="#incrementThreshold" text="Increment Threshold" />
                   <TextArea fx:id="thresholdOutInt" editable="false" maxHeight="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="50.0">
                      <HBox.margin>
                         <Insets left="25.0" />
@@ -69,7 +69,7 @@
                         <MenuItem mnemonicParsing="false" onAction="#contract" text="Contract Image" />
                         <MenuItem mnemonicParsing="false" onAction="#showHorizontals" text="Horizonal Lines" />
                         <MenuItem mnemonicParsing="false" onAction="#showVerticals" text="Vertical Lines" />
-                        <MenuItem mnemonicParsing="false" onAction="#showGrid" text="Grid" />
+                        <MenuItem mnemonicParsing="false" text="Grid" />
                      </items></Menu>
                   <Menu mnemonicParsing="false" text="Preprocessing" />
                   <Menu mnemonicParsing="false" text="Feature Extraction" />
@@ -98,7 +98,7 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Reload Image" />
+                        <Button mnemonicParsing="false" onAction="#decrementThreshold" text="Decrement Threshold" />
                      </children>
                   </HBox>
                   <HBox alignment="BOTTOM_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">

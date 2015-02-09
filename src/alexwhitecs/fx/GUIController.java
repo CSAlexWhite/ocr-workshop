@@ -42,15 +42,10 @@ public class GUIController {
 		
 		thresholdOutInt = new TextArea();
 		count = 100;
-		imagename = null;
-		
-		
+		imagename = null;	
 	}
 	
-	public void setStage(Stage inStage){
-		
-		primaryStage = inStage;
-	}
+	/*************************** GUI ELEMENT METHODS  *************************/
 	
 	@FXML public void loadImage(){
 		
@@ -63,53 +58,34 @@ public class GUIController {
 		display(image1, 1);
 	}
 	
-	@FXML public void showHorizontals(){
+	@FXML public void incrementThreshold(){
 		
-		image1.threshold(count += 1);
-		
+		image1.changeThreshold(count += 5);
 		thresholdOutInt.setText(count.toString());
 		thresholdOutVis.setProgress(((double) count) / 255.0);
-		
-		display(image1, 1);
-		System.out.println("Image 1: Threshold = " + image1.cutoff);
-		System.out.println("Count = " + count);
-		
-		horizontals();
+		display(image1, 2);
 	}
 	
-	@FXML public void showGrid(){
+	@FXML public void decrementThreshold(){
 		
+		image1.changeThreshold(count -= 5);
+		thresholdOutInt.setText(count.toString());
+		thresholdOutVis.setProgress(((double) count) / 255.0);
 		display(image1, 2);
-		grid();
+	}
+	
+	@FXML public void showHorizontals(){
+						
+		display(image1, 2);		
+		horizontals();
 	}
 	
 	@FXML public void showVerticals(){
 		
-		//OCRImage outImage = Segmentation.getBlocks(tempImage, 1, 2);
 		display(image1, 2);
 		verticals();
 	}
-	
-	@FXML public void horizontals(){
-		
-		OCRImage outImage = Segmentation.horizontals(tempImage);		
-		display(outImage, 2);
-	}
-	
-	
-	
-	@FXML public void verticals(){
-		
-		OCRImage outImage = Segmentation.verticals(tempImage);
-		display(outImage, 2);
-	}
-	
-	public void grid(){
-		
-		OCRImage outImage = Segmentation.getGrid(tempImage);
-		display(outImage, 2);
-	}
-	
+			
 	@FXML public void expand(){
 		
 		int[][] outdata = Segmentation.expand(tempImage.monochrome, tempImage.width, tempImage.height, 1);
@@ -129,9 +105,21 @@ public class GUIController {
 		int[][] outdata = Scanning.denoise(tempImage.monochrome, tempImage.width, tempImage.height);
 		OCRImage outImage = new OCRImage(outdata, count);
 		display(outImage, 2);
+	}	
+	
+	/*************************** PRIVATE METHODS ******************************/
+	
+	public void horizontals(){
+		
+		OCRImage outImage = Segmentation.horizontals(tempImage);		
+		display(outImage, 2);
 	}
 	
-	/*************************** PRIVATE METHODS ***********************/
+	public void verticals(){
+		
+		OCRImage outImage = Segmentation.verticals(tempImage);
+		display(outImage, 2);
+	}
 	
 	private void display(OCRImage image, int frame){
 		
