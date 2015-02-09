@@ -2,6 +2,7 @@ package alexwhitecs.fx;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Vector;
 
 import alexwhitecs.ocr.OCRImage;
 import alexwhitecs.ocr.Scanning;
@@ -74,10 +75,14 @@ public class GUIController {
 		display(image1, 2);
 	}
 	
+	int i=0;
+	Vector<OCRImage> images	= null;	
 	@FXML public void segment(){
 		
-		image2 = Segmentation.chop(image1);
-		display(image2, 2);
+		System.out.println(i);
+		if(i==0) images = Segmentation.chop(image1);
+		image1 = images.elementAt(i++);
+		display(image1, 2);
 	}
 	
 	@FXML public void showHorizontals(){
