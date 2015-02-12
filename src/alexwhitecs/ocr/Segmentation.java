@@ -19,12 +19,16 @@ public abstract class Segmentation {
 	
 	public static Vector<OCRImage> chop(OCRImage image){
 		
+		int emptyThreshold = 5;
+		int cutoff = image.cutoff;
+		
 		Vector<OCRImage> rows = new Vector<OCRImage>();
-		Vector<OCRImage> cols = new Vector<OCRImage>();
+		Vector<OCRImage> subrows = new Vector<OCRImage>();
 		Vector<OCRImage> letters = new Vector<OCRImage>();
 		
 		Vector<Integer> xCoords = new Vector<Integer>();
 		Vector<Integer> yCoords = new Vector<Integer>();
+		
 		int x1, x2, y1, y2;
 										
 		xCoords = getVLines(image);		
@@ -35,61 +39,103 @@ public abstract class Segmentation {
 		x1 = xCoords.remove(0);
 		x2 = xCoords.elementAt(0);
 		
-		if(x1 != x2) rows.add(selectFrom(image, x1, x2, y1, y2));
+		if(x1 != x2) rows.add(new OCRImage(selectFrom(image, x1, x2, y1, y2), cutoff));
 		
 		while(xCoords.size()>0){
 			
-			System.out.println("x1: " + x1 + ", x2: " + x2);
+			//System.out.println("x1: " + x1 + ", x2: " + x2);
 	
 			x1 = x2;
 			x2 = xCoords.remove(0);
 			
 			if(x2 == x1) continue;
 			
-			rows.add(selectFrom(image, x1, x2, y1, y2));
+			rows.add(new OCRImage(selectFrom(image, x1, x2, y1, y2), cutoff));
 		}
 		
 		for(int i=0; i<rows.size(); i++){
 			
-			if(isEmpty(rows.elementAt(i))){ 
+			if(isEmpty(rows.elementAt(i), emptyThreshold)){ 
 				
 				rows.removeElementAt(i);
 			}
 		}
 		
-	
+		OCRImage subsection = null;//new OCRImage(rows.get(1), cutoff);
+		//subsection.printImage();
 		for(int i=0; i<rows.size(); i++){
 			
-			OCRImage image2 = rows.elementAt(i);
-			yCoords = getHLines(image2);
-			System.out.println(yCoords.size());
+			subsection = new OCRImage(rows.get(i), cutoff);
+			yCoords = getHLines(subsection);
 			
 			x1 = 0;
-			x2 = image2.height;
-	
+			x2 = subsection.height;
+			
 			y1 = yCoords.remove(0);
 			y2 = yCoords.elementAt(0);
 			
-			if(y1 != y2) letters.add(selectFrom(image2, x1, x2, y1, y2));
+			if(y1 != y2) 
+				subrows.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
 			
-			while(yCoords.size()>1){
+			while(yCoords.size()>0){								
 				
-				System.out.println("y1: " + y1 + ", y2: " + y2);
-		
 				y1 = y2;
 				y2 = yCoords.remove(0);
 				
 				if(y1 == y2) continue;
 				
-				letters.add(selectFrom(image2,x1, x2, y1, y2));
+				subrows.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
 			}
-		}		
+		}
 		
-		System.out.println("letters: " + letters.size());
-		return letters;
+		for(int i=0; i<subrows.size(); i++){
+			
+			if(isEmpty(subrows.elementAt(i), emptyThreshold)){ 
+				
+				subrows.removeElementAt(i);
+			}
+		}
+		
+		subsection = null;
+		
+//		for(int i=0; i<subrows.size(); i++){
+//			
+//			subsection = new OCRImage(subrows.get(i), cutoff);
+//			xCoords = getVLines(subsection);
+//			
+//			y1 = 0;
+//			y2 = subsection.width;
+//			x1 = xCoords.remove(0);
+//			x2 = xCoords.elementAt(0);
+//			
+//			if(x1 != x2)
+//				letters.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
+//				
+//			while(xCoords.size()>0){
+//				
+//				x1 = x2;
+//				x2 = xCoords.remove(0);
+//				
+//				if(x1 == x2) continue;
+//				
+//				letters.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
+//			}
+//		}
+//		
+//		for(int i=0; i<letters.size(); i++){
+//			
+//			if(isEmpty(letters.elementAt(i))){ 
+//				
+//				letters.removeElementAt(i);
+//			}
+//		}
+		
+		return subrows;
 	}
 	
 	public static OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2){
+		
+		//preimage.changeThreshold(preimage.cutoff);
 		
 		int height = Math.abs(x2-x1);
 		int width = Math.abs(y2-y1);
@@ -111,24 +157,23 @@ public abstract class Segmentation {
 		return new OCRImage(imageArray, preimage.cutoff);
 	}
 	
-	public static boolean isEmpty(OCRImage input){
+	public static boolean isEmpty(OCRImage input, int emptyThreshold){
 		
+		int threshold = emptyThreshold;
 		input = new OCRImage(input, input.cutoff);
-
 		
 		for(int i=0; i<input.width; i++){
 			
 			for(int j=0; j<input.height; j++){
 				
-				if(input.grayscale[i][j] < input.cutoff){ 
+				if(input.monochrome[i][j] == 0){ 
 					
-					return false;
-				}
-				
+					threshold--;
+				}				
 			}
-
 		}
 		
+		if(threshold <= 0) return false;
 		return true;
 	}
 	

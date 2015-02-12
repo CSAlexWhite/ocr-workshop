@@ -1,11 +1,15 @@
 package alexwhitecs.ocr;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class OCRImage {
 	
@@ -178,5 +182,14 @@ public class OCRImage {
 	public void recalcMono(){
 		
 		setArrays();
+	}
+	
+	public void printImage(){
+		
+		JFrame frame = new JFrame();
+		frame.getContentPane().setLayout(new FlowLayout());
+		frame.getContentPane().add(new JLabel(new ImageIcon(source)));
+		frame.pack();
+		frame.setVisible(true);		
 	}
 }

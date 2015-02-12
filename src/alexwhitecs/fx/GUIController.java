@@ -52,7 +52,7 @@ public class GUIController {
 		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
-		fileChooser.setInitialDirectory(new File("D:\\Dropbox\\{Java Workspace}\\OCR-TestBed"));
+		//fileChooser.setInitialDirectory(new File("D:\\Dropbox\\{Java Workspace}\\OCR-TestBed"));
 		File file = fileChooser.showOpenDialog(primaryStage);
 		
 		image1 = new OCRImage(file, count);
