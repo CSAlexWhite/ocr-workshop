@@ -17,7 +17,7 @@ public class OCRImage {
 	public Color[][] colorArray;	
 	
 	public int[][][] rawData;	
-	public int[][] grayscale, monochrome;
+	public int[][] grayscale, monochrome, binary;
 	public int width, height, cutoff;
 	
 	/******************************* CONSTRUCTORS *****************************/
@@ -33,7 +33,8 @@ public class OCRImage {
         colorArray = Scanning.imageToColor(source, width, height);    
         rawData = Scanning.expandColor(colorArray, width, height);
         grayscale = Scanning.dataToGray(rawData, width, height);
-        threshold(cutoff);	
+        threshold(cutoff);
+        createBinary();
 	}
 	
 	public OCRImage(File file, int cutoff){
@@ -47,7 +48,8 @@ public class OCRImage {
         colorArray = Scanning.imageToColor(source, width, height);    
         rawData = Scanning.expandColor(colorArray, width, height);
         grayscale = Scanning.dataToGray(rawData, width, height);
-        threshold(cutoff);	
+        threshold(cutoff);
+        createBinary();
 	}
 	
 	public OCRImage(BufferedImage preimage, int cutoff){
@@ -56,6 +58,7 @@ public class OCRImage {
 		source = Scanning.colorToImage(
 				 Scanning.dataToColor(monochrome, width, height), 
 												width, height);
+        createBinary();
 	}
 	
 	public OCRImage(int[][] inputData, int cutoff){
@@ -66,6 +69,7 @@ public class OCRImage {
 					Scanning.dataToColor(inputData, width, height), 
 													width, height);			
 		setArrays();
+        createBinary();
 	}
 	
 	public OCRImage(OCRImage preimage, int cutoff){
@@ -191,5 +195,20 @@ public class OCRImage {
 		frame.getContentPane().add(new JLabel(new ImageIcon(source)));
 		frame.pack();
 		frame.setVisible(true);		
+	}
+	
+	public void createBinary(){
+		
+		binary = new int[width][height];
+		
+		for(int i=0; i<width; i++){			
+			for(int j=0; j<height; j++){
+				
+				if(monochrome[i][j] > 0) binary[i][j] = 0;
+				if(monochrome[i][j] <=0) binary[i][j] = 1;
+				//System.out.print(binary[i][j]);
+			}		
+			//System.out.println();
+		}
 	}
 }

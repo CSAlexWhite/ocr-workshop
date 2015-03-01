@@ -3,13 +3,15 @@ package alexwhitecs.ocr;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+
 import javax.imageio.*;
 
-public class LoadImage extends Component{
+public class LoadImage extends ComponentGraph{
 	
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = -575720947178530668L;	
 	
 	BufferedImage img;

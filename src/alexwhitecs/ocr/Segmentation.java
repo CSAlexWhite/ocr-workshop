@@ -1,49 +1,37 @@
 package alexwhitecs.ocr;
 
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
 public abstract class Segmentation {
-	
-	public static OCRImage getGrid(OCRImage image){
 		
-		OCRImage temp1 = new OCRImage(image, image.cutoff);
-		temp1 = horizontals(temp1);
-		
-		OCRImage temp2 = new OCRImage(image, image.cutoff);
-		temp2 = verticals(temp2);
-		
-		return overlay(temp1, temp2);
+	public static Vector<OCRImage> segment(OCRImage image){
+				
+		Vector<OCRImage> characters = extractComponents(detectLines(image));		
+		return characters;
 	}
 	
-	public static Vector<OCRImage> chop(OCRImage image){
+	/************************ BOXING ALGORITHMS *******************************/
+	
+	/**
+	 * This function extracts the lines of text individually out of an image
+	 * and exports them as new OCRImages.
+	 * @param image
+	 * @return
+	 */
+	public static Vector<OCRImage> detectLines(OCRImage image){		
 		
-		int emptyThreshold = 5;
-		int cutoff = image.cutoff;
-		
-		Vector<OCRImage> rows = new Vector<OCRImage>();
-		Vector<OCRImage> subrows = new Vector<OCRImage>();
-		Vector<OCRImage> letters = new Vector<OCRImage>();
-		
-		Vector<Integer> xCoords = new Vector<Integer>();
-		Vector<Integer> yCoords = new Vector<Integer>();
-		
-		int x1, x2, y1, y2;
-										
-		xCoords = getVLines(image);		
-			
-		y1 = 0;
-		y2 = image.width;
+		int x1, x2, y1 = 0, y2 = image.width, emptyThreshold = 5, cutoff = image.cutoff;		
+		Vector<OCRImage> rows = new Vector<OCRImage>();		
+		Vector<Integer> xCoords = getVLines(image);			
 
 		x1 = xCoords.remove(0);
 		x2 = xCoords.elementAt(0);
 		
-		if(x1 != x2) rows.add(new OCRImage(selectFrom(image, x1, x2, y1, y2), cutoff));
+		if(x1 != x2) 
+			rows.add(new OCRImage(selectFrom(image, x1, x2, y1, y2), cutoff));
 		
 		while(xCoords.size()>0){
-			
-			//System.out.println("x1: " + x1 + ", x2: " + x2);
 	
 			x1 = x2;
 			x2 = xCoords.remove(0);
@@ -55,27 +43,38 @@ public abstract class Segmentation {
 		
 		for(int i=0; i<rows.size(); i++){
 			
-			if(isEmpty(rows.elementAt(i), emptyThreshold)){ 
-				
-				rows.removeElementAt(i);
-			}
+			if(isEmpty(rows.elementAt(i), emptyThreshold)) 
+				rows.removeElementAt(i);			
 		}
 		
-		OCRImage subsection = null;//new OCRImage(rows.get(1), cutoff);
-		//subsection.printImage();
-		for(int i=0; i<rows.size(); i++){
+		return rows;
+	}
+	
+	/**
+	 * After the lines have been extracted, this extracts chunks of the line with 
+	 * black ink in them and returns a vector of new OCRImages.
+	 * @param lines
+	 * @return
+	 */
+	public static Vector<OCRImage> extractComponents(Vector<OCRImage> lines){
+		
+		int x1 = 0, x2, y1, y2, emptyThreshold = 5, cutoff = lines.get(0).cutoff;
+		Vector<OCRImage> components1 = new Vector<OCRImage>();
+		Vector<OCRImage> components2 = new Vector<OCRImage>();		
+		Vector<Integer> yCoords = new Vector<Integer>();											
+		OCRImage component = null;
+
+		for(int i=0; i<lines.size(); i++){
 			
-			subsection = new OCRImage(rows.get(i), cutoff);
-			yCoords = getHLines(subsection);
+			component = new OCRImage(lines.get(i), cutoff);
+			yCoords = getHLines(component);
 			
-			x1 = 0;
-			x2 = subsection.height;
-			
+			x2 = component.height;			
 			y1 = yCoords.remove(0);
 			y2 = yCoords.elementAt(0);
 			
 			if(y1 != y2) 
-				subrows.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
+				components1.add(new OCRImage(selectFrom(component, x1, x2, y1, y2), cutoff));
 			
 			while(yCoords.size()>0){								
 				
@@ -84,61 +83,40 @@ public abstract class Segmentation {
 				
 				if(y1 == y2) continue;
 				
-				subrows.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
+				components1.add(new OCRImage(selectFrom(component, x1, x2, y1, y2), cutoff));
 			}
 		}
 		
-		for(int i=0; i<subrows.size(); i++){
+		for(int i=0; i<components1.size(); i++){
 			
-			if(isEmpty(subrows.elementAt(i), emptyThreshold)){ 
-				
-				subrows.removeElementAt(i);
-			}
+			if(isEmpty(components1.elementAt(i), emptyThreshold)) 				
+				components1.removeElementAt(i);
+			
 		}
 		
-		subsection = null;
-		
-//		for(int i=0; i<subrows.size(); i++){
-//			
-//			subsection = new OCRImage(subrows.get(i), cutoff);
-//			xCoords = getVLines(subsection);
-//			
-//			y1 = 0;
-//			y2 = subsection.width;
-//			x1 = xCoords.remove(0);
-//			x2 = xCoords.elementAt(0);
-//			
-//			if(x1 != x2)
-//				letters.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
-//				
-//			while(xCoords.size()>0){
-//				
-//				x1 = x2;
-//				x2 = xCoords.remove(0);
-//				
-//				if(x1 == x2) continue;
-//				
-//				letters.add(new OCRImage(selectFrom(subsection, x1, x2, y1, y2), cutoff));
-//			}
-//		}
-//		
-//		for(int i=0; i<letters.size(); i++){
-//			
-//			if(isEmpty(letters.elementAt(i))){ 
-//				
-//				letters.removeElementAt(i);
-//			}
-//		}
-		
-		return subrows;
+		for(int i=0; i<components1.size(); i++){
+			
+			components2.add(removeSpace(components1.elementAt(i)));
+		}
+
+		return components1;
 	}
 	
-	public static OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2){
-		
-		//preimage.changeThreshold(preimage.cutoff);
-		
-		int height = Math.abs(x2-x1);
-		int width = Math.abs(y2-y1);
+	/**
+	 * A helper function: given an images and the coordinates of opposite corners
+	 * of the bounding rectangle, exports an OCRImage of what's inside the box.
+	 * @param preimage
+	 * @param x1
+	 * @param x2
+	 * @param y1
+	 * @param y2
+	 * @return
+	 * @throws ArrayIndexOutOfBoundsException
+	 */
+	public static OCRImage selectFrom(OCRImage preimage, int x1, int x2, int y1, int y2)
+		throws ArrayIndexOutOfBoundsException{
+				
+		int height = Math.abs(x2-x1), width = Math.abs(y2-y1);
 		int[][] imageArray = new int[width][height];
 		
 		int k = 0; 		
@@ -154,9 +132,21 @@ public abstract class Segmentation {
 			k++;
 		}
 		
+		try{
 		return new OCRImage(imageArray, preimage.cutoff);
+		}
+		
+		catch(IllegalArgumentException iae){}
+		
+		return preimage;
 	}
 	
+	/**
+	 * A test for blankness.
+	 * @param input
+	 * @param emptyThreshold
+	 * @return
+	 */
 	public static boolean isEmpty(OCRImage input, int emptyThreshold){
 		
 		int threshold = emptyThreshold;
@@ -178,50 +168,41 @@ public abstract class Segmentation {
 	}
 	
 	/**
-	 * A method to help display the vertical lines created during segmentation, 
-	 * mainly for debugging.
-	 * @param image
+	 * Removes unnecessary white area.
+	 * @param component
 	 * @return
 	 */
-	public static OCRImage verticals(OCRImage image){
+	public static OCRImage removeSpace(OCRImage component){
 		
-		Vector<Integer> lines = getHLines(image);
-		
-		OCRImage output1 = new OCRImage(image, image.cutoff);
-		
-		for(int i=0; i<image.width; i++){
-			
-			if(lines.contains(i)) for(int j=0; j<image.height; j++) output1.monochrome[i][j] = 0;
+		Vector<Integer> xCoords = getVLines(component);
+				
+		for(int i=0; i<xCoords.size(); i++){
+	
+			//System.out.println("Looking at " + xCoords.get(i));
+			if((xCoords.get(i) == 0) || xCoords.get(i) == component.width-1){
+				
+				//System.out.println("Removed " + xCoords.get(i));
+				xCoords.remove(i);
+			}
+				
 		}
 		
-		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
+//		System.out.println("x1: " + xCoords.get(0));
+//		System.out.println("x2: " + xCoords.get(xCoords.size()-1)); 
+//		System.out.println("y1: " + 0);
+//		System.out.println("y2: " + (component.width-1));
 		
-		return output2;
-	}
-	
-	/**
-	 * A method to help display the horizontal lines created during segmentation,
-	 * mainly for debugging.
-	 * @param image
-	 * @return
-	 */
-	public static OCRImage horizontals(OCRImage image){
-		
-		Vector<Integer> lines = getVLines(image);
-		
-		OCRImage output1 = new OCRImage(image, image.cutoff);
-		
-		for(int i=0; i<image.height; i++){
-			
-			if(lines.contains(i)) for(int j=0; j<image.width; j++) output1.monochrome[j][i] = 0;
+		try{
+		return new OCRImage(selectFrom(	component, 
+										0, component.width-1,
+										xCoords.get(0), xCoords.get(xCoords.size()-1)), 
+										component.cutoff);
 		}
+		catch(ArrayIndexOutOfBoundsException aioobe){}
 		
-		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
-		
-		return output2;
+		return component;
 	}
-	
-	
+		
 	/**
 	 * Takes an OCRImage input and for each horizontal line:
 	 * (1) Counts black pixels
@@ -239,25 +220,16 @@ public abstract class Segmentation {
 		for(int i=0; i<input.width; i++){	  // Find the empty lines which extend
 			hasBlack = 0;
 			
-			for(int j=0; j<input.height; j++){ // all the way across the page
+			for(int j=0; j<input.height; j++)								
+				if(input.monochrome[i][j] < input.cutoff) hasBlack++;				
 				
-				//System.out.print(input.monochrome[j][i]);
-				
-				if(input.monochrome[i][j] < input.cutoff){ // if the line has black
-					
-					hasBlack++;
-				}
-			}
-			
-			//System.out.println(hasBlack);			
-			if(hasBlack==0){
-				
-				emptyLines.add(i);  // otherwise push that line index
-				//System.out.println(i);
-			}
+			if(hasBlack==0) emptyLines.add(i);  // otherwise push that line index			
 		}
 		
 		Vector<Integer> edges = new Vector<Integer>();
+		
+		edges.add(emptyLines.get(0));
+		edges.add(emptyLines.get(emptyLines.size()-1));
 		
 		for(int i=0; i<emptyLines.size()-1; i++){
 			
@@ -271,16 +243,31 @@ public abstract class Segmentation {
 			else edges.add(emptyLines.elementAt(i));
 		}
 		
-//		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
-//		System.out.println();
-		
 		edges.sort(new IntegerComparator());
 		
-//		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
-//		System.out.println();
+		/* REMOVE EDGES THAT ARE TOO CLOSE TOGETHER? */		
+		int threshold = 0;
+		
+		int temp1 = 0, temp2 = 0;
+		for(int i=0; i<edges.size()-1; i++){
+			
+			temp1 = edges.get(i);
+			temp2 = edges.get(i+1);
+			
+			//System.out.println("temp1: " + temp1 + ", temp2: " + temp2);
+			
+			if(Math.abs(temp1 - temp2) < threshold){
+				
+				edges.remove(i);
+				
+				try{edges.remove(i+1);}
+				catch(ArrayIndexOutOfBoundsException aioobe){}
+								
+				//System.out.println("Removed " + temp1 + " and " + temp2);
+			}
+		}
 		
 		return edges;
-		//return getEdges(emptyLines);	
 	}
 	
 	/**
@@ -301,55 +288,33 @@ public abstract class Segmentation {
 		for(int i=0; i<input.height; i++){	  // Find the empty lines which extend
 			hasBlack = 0;
 			
-			for(int j=0; j<input.width; j++){ // all the way across the page
+			for(int j=0; j<input.width; j++)  // CHECK Memory cacheing issues
 				
-				//System.out.print(input.monochrome[j][i]);
-				
-				if(input.monochrome[j][i] < input.cutoff){ // if the line has black
-					
-					hasBlack++;
-				}
-			}
-			
-			//System.out.println(hasBlack);
-			
-			if(hasBlack==0){
-				
-				emptyLines.add(i);  // otherwise push that line index
-				//System.out.println(i);
-			}
+				if(input.monochrome[j][i] < input.cutoff) hasBlack++;
+
+			if(hasBlack==0) emptyLines.add(i);
 		}
 		
 		Vector<Integer> edges = new Vector<Integer>();
 		
 		for(int i=0; i<emptyLines.size()-1; i++){
 			
-			if(emptyLines.elementAt(i+1)-emptyLines.elementAt(i) == 1) continue;
+			if(emptyLines.elementAt(i+1)-emptyLines.elementAt(i) < 15) continue;
 			else edges.add(emptyLines.elementAt(i));
 		}
 		
 		for(int i=emptyLines.size()-1; i>0; i--){
 			
-			if(emptyLines.elementAt(i)-emptyLines.elementAt(i-1) == 1) continue;
+			if(emptyLines.elementAt(i)-emptyLines.elementAt(i-1) < 15) continue;
 			else edges.add(emptyLines.elementAt(i));
 		}
 		
-		
-//		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
-//		System.out.println();
-		
 		edges.sort(new IntegerComparator());
-		
-//		for(int i=0; i<edges.size(); i++) System.out.print(edges.elementAt(i) + " ");
-//		System.out.println();
-		
-		
 		return edges;
-		//return getEdges(emptyLines);	
 	}
 	
 	/** 
-	 * Not that useful a function, but would look cool if I could finish it
+	 * Extracts the closest edge to the character.
 	 * @param input
 	 * @return
 	 */
@@ -357,38 +322,73 @@ public abstract class Segmentation {
 		
 		if(input.isEmpty()) return new Stack<Integer>();
 		
-		int threshold = 1;
-		
-		//System.out.println(input.size());
-		
 		Stack<Integer> edges = new Stack<Integer>();
-		
-		// first, find the ranges of the groups, need to get the first/last of each group
-		
 		Integer temp1, temp2;
-		temp1 = input.pop();
-		edges.push(temp1);
 		
+		edges.push(temp1 = input.pop());		
 		while(!input.empty()){
 			
-			temp2 = input.pop();
-				
-			if( Math.abs(temp2 - temp1) >= threshold){ 
-				
-				edges.push(temp2);
-			}
+			temp2 = input.pop();				
+			if(Math.abs(temp2 - temp1) >= 1) edges.push(temp2);			
 			
 			if(input.empty()) break;
-			temp1 = input.pop();
 			
-			if( Math.abs(temp2 - temp1) >= threshold){ 
-				
-				edges.push(temp1);
-			}
+			temp1 = input.pop();			
+			if(Math.abs(temp2 - temp1) >= 1) edges.push(temp1);			
 		}
 		
 		return edges;
 	}
+	
+	/**************************** DISPLAY / DEBUG UTILITIES *******************/	
+	
+	/**
+	 * A method to help display the vertical lines created during segmentation, 
+	 * mainly for debugging.
+	 * @param image
+	 * @return
+	 */
+	public static OCRImage chopVertically(OCRImage image){
+		
+		Vector<Integer> lines = getHLines(image);
+		
+		OCRImage output1 = new OCRImage(image, image.cutoff);
+		
+		for(int i=0; i<image.width; i++){
+			
+			if(lines.contains(i)) for(int j=0; j<image.height; j++) 
+				output1.monochrome[i][j] = 0;
+		}
+		
+		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
+		
+		return output2;
+	}
+	
+	/**
+	 * A method to help display the horizontal lines created during segmentation,
+	 * mainly for debugging.
+	 * @param image
+	 * @return
+	 */
+	public static OCRImage chopHorizontally(OCRImage image){
+		
+		Vector<Integer> lines = getVLines(image);
+		
+		OCRImage output1 = new OCRImage(image, image.cutoff);
+		
+		for(int i=0; i<image.height; i++){
+			
+			if(lines.contains(i)) for(int j=0; j<image.width; j++) 
+				output1.monochrome[j][i] = 0;
+		}
+		
+		OCRImage output2 = new OCRImage(output1.monochrome, output1.cutoff);
+		
+		return output2;
+	}
+	
+	/**************************** EXPERIMENTS *********************************/
 	
 	public static OCRImage getBlocks(OCRImage input, int iterations, int innerLoops){
 		
@@ -449,18 +449,5 @@ public abstract class Segmentation {
 			}
 	
 		return output;
-	}
-	
-	public static OCRImage overlay(OCRImage input1, OCRImage input2){
-				
-		for(int i=0; i<input1.width; i++){			
-			for(int j=0; j<input1.height; j++){
-				
-				if(input1.monochrome[i][j] < input2.monochrome[i][j]) input1.monochrome[i][j] = input2.monochrome[i][j];
-				
-			}
-		}
-		
-		return input2; 
 	}
 }
